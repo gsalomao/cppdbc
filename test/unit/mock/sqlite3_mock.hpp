@@ -86,6 +86,15 @@ public:
 
     MOCK_METHOD(int, sqlite3_open_v2, (const char*, sqlite3**, int, const char*));
     MOCK_METHOD(int, sqlite3_close, (sqlite3*));
+    MOCK_METHOD(int, sqlite3_prepare_v2, (sqlite3*, const char*, int, sqlite3_stmt**, const char**));
+    MOCK_METHOD(int, sqlite3_finalize, (sqlite3_stmt*));
+    MOCK_METHOD(int, sqlite3_step, (sqlite3_stmt*));
+    MOCK_METHOD(int, sqlite3_bind_int, (sqlite3_stmt*, int, int));
+    MOCK_METHOD(int, sqlite3_bind_int64, (sqlite3_stmt*, int, sqlite3_int64));
+    MOCK_METHOD(int, sqlite3_bind_double, (sqlite3_stmt*, int, double));
+    MOCK_METHOD(int, sqlite3_bind_text, (sqlite3_stmt*, int, const char*, int, void (*)(void*)));
+    MOCK_METHOD(int, sqlite3_bind_blob, (sqlite3_stmt*, int, const void*, int, void (*)(void*)));
+    MOCK_METHOD(int, sqlite3_column_int, (sqlite3_stmt*, int));
 };
 
 } // namespace cppdbc

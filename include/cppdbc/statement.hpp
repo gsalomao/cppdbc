@@ -20,6 +20,11 @@
  * SOFTWARE.
  */
 
+/**
+ * @brief Statement interface.
+ * @file
+ */
+
 #ifndef STATEMENT_HPP
 #define STATEMENT_HPP
 

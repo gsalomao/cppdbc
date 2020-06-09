@@ -29,6 +29,10 @@ namespace cppdbc {
 
 class SQLiteDatabaseTest : public ::testing::Test {
 protected:
+    const char* SQL_GET_VERSION = "SELECT SQLITE_VERSION();";
+    const char* SQL_CREATE_TABLE_INT = "CREATE TABLE test(id INTEGER NOT NULL, PRIMARY KEY(id));";
+    const char* SQL_INSERT_VALUE = "INSERT INTO test VALUES(?);";
+
     void SetUp() override;
     void TearDown() override;
 
@@ -78,6 +82,35 @@ TEST_F(SQLiteDatabaseTest, CreateDatabaseInReadWriteModeWhenExists) {
     std::make_shared<SQLiteDatabase>("tmp.db", SQLiteDatabase::SQLiteMode::CREATE);
     EXPECT_NO_THROW(std::make_shared<SQLiteDatabase>("tmp.db",
             SQLiteDatabase::SQLiteMode::READ_WRITE));
+}
+
+TEST_F(SQLiteDatabaseTest, CreateStatementWithInvalidSQLThrowsException) {
+    EXPECT_THROW(database_->createStatement("SELECT SQLITE_"),
+            std::invalid_argument);
+}
+
+TEST_F(SQLiteDatabaseTest, ExecuteStatement) {
+    auto statement = database_->createStatement(SQL_GET_VERSION);
+    auto result = statement->execute();
+    EXPECT_NE(result, nullptr);
+}
+
+TEST_F(SQLiteDatabaseTest, ExecuteStatementWithoutOutputReturnsNullptr) {
+    auto statement = database_->createStatement(SQL_CREATE_TABLE_INT);
+    EXPECT_EQ(statement->execute(), nullptr);
+}
+
+TEST_F(SQLiteDatabaseTest, ExecuteStatemetViolatesConstraintThrowsException) {
+    auto statement = database_->createStatement(SQL_CREATE_TABLE_INT);
+    statement->execute();
+
+    statement = database_->createStatement(SQL_INSERT_VALUE);
+    statement->bind(1, 0);
+    statement->execute();
+
+    statement = database_->createStatement(SQL_INSERT_VALUE);
+    statement->bind(1, 0);
+    EXPECT_THROW(statement->execute(), std::logic_error);
 }
 
 } // namespace cppdbc

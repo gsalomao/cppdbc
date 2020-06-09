@@ -20,6 +20,11 @@
  * SOFTWARE.
  */
 
+/**
+ * @brief SQLite statement.
+ * @file
+ */
+
 #ifndef SQLITE_STATEMENT_HPP
 #define SQLITE_STATEMENT_HPP
 
@@ -35,7 +40,7 @@ namespace cppdbc {
 class SQLiteDatabase;
 
 /**
- * @brief SQL statement for SQLite.
+ * @brief SQLite statement.
  *
  * A SQLite statement object manages a single SQL query for a SQLite database.
  */
@@ -72,10 +77,10 @@ public:
      *
      * Destructor of the SQLite statement.
      */
-    ~SQLiteStatement() override = default;
+    ~SQLiteStatement() override;
 
     /**
-     * Remove copy assignment.
+     * @brief Remove copy assignment.
      *
      * SQLite statement is not copyable.
      */
@@ -269,6 +274,46 @@ public:
      * column.
      */
     void bind(const void* value, size_t size, uint16_t index) override;
+
+private:
+    /**
+     * @brief SQLite result set is friend.
+     *
+     * Defining SQL result set as friend of SQLite statement, the result set
+     * can execute statement directly.
+     */
+    friend class SQLiteResultSet;
+
+    /**
+     * @brief Check SQLite result.
+     *
+     * Check if result returned from SQLite is SQLITE_OK. If it's not, it
+     * throws an exception.
+     *
+     * @param[in] result Result value from SQLite.
+     * @param[in] message Message of the exception.
+     *
+     * @throw std::invalid_argument in case of the result value is not
+     * SQLITE_OK.
+     */
+    static void checkSQLiteResult(int result, const std::string& message);
+
+    /**
+     * @brief Indicates if the statement has not completed.
+     *
+     * @note A statement is pending while it wasn't executed yet.
+     */
+    bool pending_ = true;
+
+    /**
+     * @brief SQLite statement handler.
+     */
+    sqlite3_stmt* statement_ = nullptr;
+
+    /**
+     * @brief SQLite database object.
+     */
+    std::shared_ptr<SQLiteDatabase> database_;
 };
 
 } // namespace cppdbc

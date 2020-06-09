@@ -42,6 +42,7 @@ protected:
     void TearDown() override;
 
     sqlite3* fakeSQLite_{nullptr};
+    sqlite3_stmt* fakeStatement_{nullptr};
     std::shared_ptr<SQLite3Mock> mock_;
     std::shared_ptr<SQLiteDatabase> database_;
 };
@@ -51,14 +52,19 @@ void SQLiteDatabaseTest::SetUp() {
     SQLite3Mock::registerMock(mock_);
 
     fakeSQLite_ = reinterpret_cast<sqlite3*>(new int(1));
+    fakeStatement_ = reinterpret_cast<sqlite3_stmt*>(new int(1));
 
     ON_CALL(*mock_, sqlite3_open_v2)
             .WillByDefault(DoAll(SetArgPointee<1>(fakeSQLite_), Return(SQLITE_OK)));
+
+    ON_CALL(*mock_, sqlite3_prepare_v2)
+            .WillByDefault(DoAll(SetArgPointee<3>(fakeStatement_), Return(SQLITE_OK)));
 
     database_ = std::make_shared<SQLiteDatabase>("tmp.db");
 }
 
 void SQLiteDatabaseTest::TearDown() {
+    delete reinterpret_cast<int*>(fakeStatement_);
     delete reinterpret_cast<int*>(fakeSQLite_);
 
     if (database_) {
@@ -167,6 +173,13 @@ TEST_F(SQLiteDatabaseTest, CreateStatementFromInvalidDatabaseThrowsException) {
 
 TEST_F(SQLiteDatabaseTest, CheckIfTableExists) {
     auto database = std::make_shared<SQLiteDatabase>("tmp.db");
+
+    ON_CALL(*mock_, sqlite3_step)
+            .WillByDefault(Return(SQLITE_ROW));
+
+    ON_CALL(*mock_, sqlite3_column_int)
+            .WillByDefault(Return(1));
+
     EXPECT_TRUE(database->hasTable("test"));
 }
 
