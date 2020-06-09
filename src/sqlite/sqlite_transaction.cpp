@@ -20,11 +20,31 @@
  * SOFTWARE.
  */
 
-#include <gtest/gtest.h>
+#include "sqlite_transaction.hpp"
 
-class UnitTest : public ::testing::Test {
-};
+namespace cppdbc {
 
-TEST_F(UnitTest, testOk) {
-    EXPECT_TRUE(true);
+SQLiteTransaction::SQLiteTransaction(const std::shared_ptr<SQLiteDatabase>& database) {
+    (void) database;
 }
+
+SQLiteTransaction::SQLiteTransaction(SQLiteTransaction&& other) noexcept {
+    (void) other;
+}
+
+SQLiteTransaction& SQLiteTransaction::operator=(SQLiteTransaction&& other) noexcept {
+    (void) other;
+    return *this;
+}
+
+bool SQLiteTransaction::isPending() {
+    return true;
+}
+
+void SQLiteTransaction::commit() {
+}
+
+void SQLiteTransaction::rollback() {
+}
+
+} // namespace cppdbc

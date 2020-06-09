@@ -75,6 +75,7 @@ if (CPPCHECK)
     COMMAND ${CPPCHECK} -q
     --enable=all
     --suppress=missingIncludeSystem
+    --suppress=unusedFunction:../src/sqlite/*.cpp
     -I../include
     -I../src
     ../src/)

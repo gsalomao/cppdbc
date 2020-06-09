@@ -52,6 +52,4 @@ target_link_libraries(${PROJECT_NAME}_unit
   GMock::GMock
   GMock::Main)
 
-target_sources(${PROJECT_NAME}_unit PRIVATE
-  ${PROJECT_SOURCE_DIR}/src/dummy.cpp
-  unit_test.cpp)
+add_subdirectory(sqlite)

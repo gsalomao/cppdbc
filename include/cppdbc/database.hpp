@@ -20,6 +20,11 @@
  * SOFTWARE.
  */
 
+/**
+ * @brief Database interface.
+ * @file
+ */
+
 #ifndef DATABASE_HPP
 #define DATABASE_HPP
 
@@ -32,7 +37,7 @@
 namespace cppdbc {
 
 /**
- * @brief Database.
+ * @brief Database interface.
  *
  * The database object manages the connection with the database.
  */

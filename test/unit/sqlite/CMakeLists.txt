@@ -18,32 +18,15 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-add_executable(${PROJECT_NAME}_integration EXCLUDE_FROM_ALL)
-
-set(INTEGRATION_TEST_REPORT_FILE "integration-test-report.xml" CACHE STRING
-  "File name of the integration test report")
-
-message(STATUS "Integration test report file: ${INTEGRATION_TEST_REPORT_FILE}")
-
-find_program(CTEST ctest REQUIRED)
-
-add_custom_target(test_integration)
-add_custom_command(TARGET test_integration COMMAND ${CTEST} -V -R integration-tests)
-add_dependencies(build_tests ${PROJECT_NAME}_integration)
-
-add_test(NAME integration-tests
-  COMMAND $<TARGET_FILE:${PROJECT_NAME}_integration> --gtest_color=yes
-  --gtest_output=xml:${TEST_REPORT_PATH}/${INTEGRATION_TEST_REPORT_FILE})
-
-set_tests_properties(integration-tests
-  PROPERTIES TIMEOUT 600)
-
 find_package(SQLite3 REQUIRED)
 
-target_link_libraries(${PROJECT_NAME}_integration
-  GTest::GTest
-  GMock::GMock
-  GMock::Main
-  SQLite::SQLite3)
+target_sources(${PROJECT_NAME}_unit PRIVATE
+  ${CMAKE_SOURCE_DIR}/src/sqlite/sqlite_database.cpp
+  ${CMAKE_SOURCE_DIR}/src/sqlite/sqlite_resultset.cpp
+  ${CMAKE_SOURCE_DIR}/src/sqlite/sqlite_statement.cpp
+  ${CMAKE_SOURCE_DIR}/src/sqlite/sqlite_transaction.cpp
+  ../mock/sqlite3_mock.cpp
+  sqlite_database_test.cpp)
 
-add_subdirectory(sqlite)
+target_include_directories(${PROJECT_NAME}_unit PUBLIC
+  ${SQLite3_INCLUDE_DIRS})
