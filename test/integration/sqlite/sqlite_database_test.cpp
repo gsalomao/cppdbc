@@ -31,7 +31,9 @@ class SQLiteDatabaseTest : public ::testing::Test {
 protected:
     const char* SQL_GET_VERSION = "SELECT SQLITE_VERSION();";
     const char* SQL_CREATE_TABLE_INT = "CREATE TABLE test(id INTEGER NOT NULL, PRIMARY KEY(id));";
+    const char* SQL_CREATE_TABLE_TEXT = "CREATE TABLE test(id TEXT(10));";
     const char* SQL_INSERT_VALUE = "INSERT INTO test VALUES(?);";
+    const char* SQL_SELECT_VALUE = "SELECT id FROM test;";
 
     void SetUp() override;
     void TearDown() override;
@@ -111,6 +113,38 @@ TEST_F(SQLiteDatabaseTest, ExecuteStatemetViolatesConstraintThrowsException) {
     statement = database_->createStatement(SQL_INSERT_VALUE);
     statement->bind(1, 0);
     EXPECT_THROW(statement->execute(), std::logic_error);
+}
+
+TEST_F(SQLiteDatabaseTest, GetResultSet) {
+    auto statement = database_->createStatement(SQL_CREATE_TABLE_INT);
+    statement->execute();
+
+    statement = database_->createStatement(SQL_INSERT_VALUE);
+    statement->bind(1, 0);
+    statement->execute();
+
+    statement = database_->createStatement(SQL_INSERT_VALUE);
+    statement->bind(2, 0);
+    statement->execute();
+
+    statement = database_->createStatement(SQL_SELECT_VALUE);
+    auto result = statement->execute();
+    EXPECT_EQ(result->uint8(0), 1);
+
+    ASSERT_TRUE(result->next());
+    EXPECT_EQ(result->uint8(0), 2);
+
+    EXPECT_FALSE(result->next());
+    EXPECT_FALSE(result->next());
+}
+
+TEST_F(SQLiteDatabaseTest, CheckIfTableExists) {
+    EXPECT_FALSE(database_->hasTable("test"));
+
+    auto statement = database_->createStatement(SQL_CREATE_TABLE_TEXT);
+    statement->execute();
+
+    EXPECT_TRUE(database_->hasTable("test"));
 }
 
 } // namespace cppdbc

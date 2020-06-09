@@ -27,6 +27,7 @@ target_sources(${PROJECT_NAME}_unit PRIVATE
   ${CMAKE_SOURCE_DIR}/src/sqlite/sqlite_transaction.cpp
   ../mock/sqlite3_mock.cpp
   sqlite_database_test.cpp
+  sqlite_resultset_test.cpp
   sqlite_statement_test.cpp)
 
 target_include_directories(${PROJECT_NAME}_unit PUBLIC

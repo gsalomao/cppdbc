@@ -20,6 +20,11 @@
  * SOFTWARE.
  */
 
+/**
+ * @brief Result set interface.
+ * @file
+ */
+
 #ifndef RESULT_SET_HPP
 #define RESULT_SET_HPP
 

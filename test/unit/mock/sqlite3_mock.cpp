@@ -102,7 +102,37 @@ int sqlite3_bind_blob(sqlite3_stmt* stmt, int col, const void* blob, int len,
     return mock.sqlite3_bind_blob(stmt, col, blob, len, ptr);
 }
 
+int sqlite3_column_type(sqlite3_stmt* stmt, int col) {
+    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    return mock.sqlite3_column_type(stmt, col);
+}
+
 int sqlite3_column_int(sqlite3_stmt* stmt, int col) {
     SQLite3Mock& mock = SQLite3Mock::getInstance();
     return mock.sqlite3_column_int(stmt, col);
+}
+
+sqlite3_int64 sqlite3_column_int64(sqlite3_stmt* stmt, int col) {
+    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    return mock.sqlite3_column_int64(stmt, col);
+}
+
+double sqlite3_column_double(sqlite3_stmt* stmt, int col) {
+    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    return mock.sqlite3_column_double(stmt, col);
+}
+
+const unsigned char* sqlite3_column_text(sqlite3_stmt* stmt, int col) {
+    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    return mock.sqlite3_column_text(stmt, col);
+}
+
+const void* sqlite3_column_blob(sqlite3_stmt* stmt, int col) {
+    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    return mock.sqlite3_column_blob(stmt, col);
+}
+
+int sqlite3_column_bytes(sqlite3_stmt* stmt, int col) {
+    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    return mock.sqlite3_column_bytes(stmt, col);
 }

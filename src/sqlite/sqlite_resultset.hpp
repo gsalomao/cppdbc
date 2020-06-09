@@ -20,6 +20,11 @@
  * SOFTWARE.
  */
 
+/**
+ * @brief SQLite result set.
+ * @file
+ */
+
 #include <memory>
 #include <string>
 
@@ -34,7 +39,7 @@ namespace cppdbc {
 class SQLiteStatement;
 
 /**
- * @brief SQL result set for SQLite database.
+ * @brief SQLite result set.
  *
  * A SQLite result set object manages the result from a SQLite statement.
  */
@@ -240,6 +245,34 @@ public:
      * @throw std::logic_error in case of failure to get BLOB.
      */
     std::unique_ptr<const void*> blob(column_t column, size_t* size) const override;
+
+private:
+    /**
+     * @brief Check data type.
+     *
+     * Check if a given column has the expected data type. If it doesn't have
+     * the expected data type, it throws an exception.
+     *
+     * @param[in] column Column to check the data type.
+     * @param[in] dataType Expected data type to the column.
+     *
+     * @throw std::invalid_argument in case of the column doesn't have the
+     * expected data type.
+     */
+    void expectDataType(column_t column, DataType type) const;
+
+    /**
+     * @brief Indicates if the result set is pending.
+     *
+     * @note A result set is pending util the last result has been got from
+     * the statement.
+     */
+    bool pending_ = true;
+
+    /**
+     * @brief SQLite statement to get the next results sets.
+     */
+    std::shared_ptr<SQLiteStatement> statement_;
 };
 
 } // namespace cppdbc
