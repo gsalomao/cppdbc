@@ -1,0 +1,55 @@
+language: cpp
+dist: bionic
+sudo: required
+
+branches:
+  only:
+    - develop
+    - master
+
+compiler:
+  - gcc
+
+cache:
+  directories:
+    - ${TRAVIS_BUILD_DIR}/deps
+
+before_install:
+  - sudo apt-get install -y --no-install-recommends cppcheck doxygen googletest lcov
+
+install:
+  # Upgrade CMake
+  - CMAKE_DIR="${TRAVIS_BUILD_DIR}/cmake"
+  - mkdir -p ${CMAKE_DIR}
+  - cd ${CMAKE_DIR}
+  - travis_retry wget --no-check-certificate https://cmake.org/files/v3.15/cmake-3.15.5-Linux-x86_64.tar.gz
+  - tar -xf cmake-3.15.5-Linux-x86_64.tar.gz > /dev/null
+  - mv cmake-3.15.5-Linux-x86_64 cmake
+  - export PATH=${CMAKE_DIR}/cmake/bin:${PATH}
+  - cmake -version
+  # Create folder to store dependencies
+  - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
+  - mkdir -p ${DEPS_DIR}
+  - cd ${DEPS_DIR}
+  # Build GTest
+  - cmake -B googletest /usr/src/googletest
+  - cmake --build googletest
+  - cd googletest
+  - sudo make install
+  - cd ${DEPS_DIR}
+  # Finish install
+  - cd ${TRAVIS_BUILD_DIR}
+
+script:
+  - cmake -Bbuild -DENABLE_COVERAGE=YES .
+  - cmake --build build/ --target static
+  - cmake --build build/ --target all
+  - cmake --build build/ --target build_tests
+  - cmake --build build/ --target test_unit
+  - cmake --build build/ --target coverage
+  - cmake --build build/ --target test_integration
+  - cmake --build build/ --target docs
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash) -f build/coverage/coverage.info \
+    || echo "Codecov did not collect coverage reports"

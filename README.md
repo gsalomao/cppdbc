@@ -1,5 +1,9 @@
 # cppdbc
-> Database Connector for C++.
+> Database Connector for C++
+
+[![Build Status](https://travis-ci.org/gsalomao/cppdbc.svg?branch=develop)](https://travis-ci.org/gsalomao/cppdbc)
+[![codecov](https://codecov.io/gh/gsalomao/cppdbc/branch/develop/graph/badge.svg)](https://codecov.io/gh/gsalomao/cppdbc)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 The cppdbc allows any C++ application to interact with databases.
 
