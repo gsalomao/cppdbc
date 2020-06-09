@@ -20,6 +20,11 @@
  * SOFTWARE.
  */
 
+/**
+ * @brief SQLite transaction.
+ * @file
+ */
+
 #ifndef SQLITE_TRANSACTION_HPP
 #define SQLITE_TRANSACTION_HPP
 
@@ -34,7 +39,7 @@ namespace cppdbc {
 class SQLiteDatabase;
 
 /**
- * @brief SQL transaction for SQLite database.
+ * @brief SQLite transaction.
  *
  * A SQLite transaction manages a transaction for a SQLite database.
  */
@@ -71,10 +76,10 @@ public:
      *
      * Destructor of the SQLite transaction.
      */
-    ~SQLiteTransaction() override = default;
+    ~SQLiteTransaction() override;
 
     /**
-     * Remove copy assignment.
+     * @brief Remove copy assignment.
      *
      * SQLite transaction is not copyable.
      */
@@ -115,6 +120,30 @@ public:
      * @throw std::logic_error in case of failure to rollback the transaction.
      */
     void rollback() override;
+
+private:
+    /**
+     * @brief Execute SQLite statement.
+     *
+     * Execute statement related to the SQLite transaction.
+     *
+     * @param stmt Statement to be executed.
+     *
+     * @return SQLite result.
+     */
+    int executeStatement(const std::string& stmt);
+
+    /**
+     * @brief Indicates if the transaction is pending.
+     *
+     * @note A transaction is pending when it wasn't committed or rolled back.
+     */
+    bool pending_ = true;
+
+    /**
+     * @brief SQLite database object.
+     */
+    std::shared_ptr<SQLiteDatabase> database_;
 };
 
 } // namespace cppdbc

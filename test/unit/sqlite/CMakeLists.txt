@@ -28,7 +28,8 @@ target_sources(${PROJECT_NAME}_unit PRIVATE
   ../mock/sqlite3_mock.cpp
   sqlite_database_test.cpp
   sqlite_resultset_test.cpp
-  sqlite_statement_test.cpp)
+  sqlite_statement_test.cpp
+  sqlite_transaction_test.cpp)
 
 target_include_directories(${PROJECT_NAME}_unit PUBLIC
   ${SQLite3_INCLUDE_DIRS})

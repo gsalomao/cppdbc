@@ -70,6 +70,12 @@ int sqlite3_finalize(sqlite3_stmt* stmt) {
     return mock.sqlite3_finalize(stmt);
 }
 
+int sqlite3_exec(sqlite3* db, const char* sql,
+        int (* callback)(void*, int, char**, char**), void* arg, char** errmsg) {
+    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    return mock.sqlite3_exec(db, sql, callback, arg, errmsg);
+}
+
 int sqlite3_step(sqlite3_stmt* stmt) {
     SQLite3Mock& mock = SQLite3Mock::getInstance();
     return mock.sqlite3_step(stmt);

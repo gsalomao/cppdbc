@@ -20,6 +20,11 @@
  * SOFTWARE.
  */
 
+/**
+ * @brief Transaction interface.
+ * @file
+ */
+
 #ifndef TRANSACTION_HPP
 #define TRANSACTION_HPP
 

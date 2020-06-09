@@ -22,29 +22,88 @@
 
 #include "sqlite_transaction.hpp"
 
+#include "cppdbc/sqlite/sqlite_database.hpp"
+
 namespace cppdbc {
 
-SQLiteTransaction::SQLiteTransaction(const std::shared_ptr<SQLiteDatabase>& database) {
-    (void) database;
+SQLiteTransaction::SQLiteTransaction(const std::shared_ptr<SQLiteDatabase>& database) :
+        database_{database} {
+
+    if (database_ == nullptr) {
+        throw std::invalid_argument(
+                "Cannot create transaction for invalid database");
+    }
+
+    sqlite3_exec(database_->sqlite_, "BEGIN TRANSACTION;", nullptr, nullptr,
+            nullptr);
 }
 
-SQLiteTransaction::SQLiteTransaction(SQLiteTransaction&& other) noexcept {
-    (void) other;
+SQLiteTransaction::SQLiteTransaction(SQLiteTransaction&& other) noexcept:
+        pending_{other.pending_},
+        database_{std::move(other.database_)} {
+
+    other.pending_ = false;
+}
+
+SQLiteTransaction::~SQLiteTransaction() {
+    if (pending_) {
+        executeStatement("ROLLBACK;");
+    }
 }
 
 SQLiteTransaction& SQLiteTransaction::operator=(SQLiteTransaction&& other) noexcept {
-    (void) other;
+    if (this == &other) {
+        return *this;
+    }
+
+    database_ = std::move(other.database_);
+    pending_ = other.pending_;
+    other.pending_ = false;
+
     return *this;
 }
 
 bool SQLiteTransaction::isPending() {
-    return true;
+    return pending_;
 }
 
 void SQLiteTransaction::commit() {
+    if (!pending_) {
+        throw std::logic_error("Transaction already committed or rolled back");
+    }
+
+    if (database_->sqlite_ == nullptr) {
+        throw std::logic_error("Cannot commit transaction with invalid database");
+    }
+
+    int result = executeStatement("COMMIT;");
+    pending_ = false;
+
+    if (result != SQLITE_OK) {
+        throw std::logic_error("Failed to commit SQLite transaction");
+    }
 }
 
 void SQLiteTransaction::rollback() {
+    if (!pending_) {
+        throw std::logic_error("Cannot rollback SQLite transaction");
+    }
+
+    if (database_->sqlite_ == nullptr) {
+        throw std::logic_error("Cannot commit transaction with invalid database");
+    }
+
+    int result = executeStatement("ROLLBACK;");
+    pending_ = false;
+
+    if (result != SQLITE_OK) {
+        throw std::logic_error("Failed to rollback SQLite transaction");
+    }
+}
+
+int SQLiteTransaction::executeStatement(const std::string& stmt) {
+    return sqlite3_exec(database_->sqlite_, stmt.c_str(), nullptr, nullptr,
+            nullptr);
 }
 
 } // namespace cppdbc
