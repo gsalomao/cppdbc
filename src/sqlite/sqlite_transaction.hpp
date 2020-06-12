@@ -43,7 +43,7 @@ class SQLiteDatabase;
  *
  * A SQLite transaction manages a transaction for a SQLite database.
  */
-class SQLiteTransaction : public ITransaction {
+class SQLiteTransaction : public Transaction {
 public:
     /**
      * @brief Create SQLite transaction.

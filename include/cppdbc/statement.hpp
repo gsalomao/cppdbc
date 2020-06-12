@@ -31,21 +31,21 @@
 namespace cppdbc {
 
 // Forward declarations
-class IResultSet;
+class ResultSet;
 
 /**
  * @brief SQL statement.
  *
  * A statement object manages a single SQL query.
  */
-class IStatement {
+class Statement {
 public:
     /**
      * @brief Destroy statement.
      *
      * Destructor of the statement.
      */
-    virtual ~IStatement() = default;
+    virtual ~Statement() = default;
 
     /**
      * @brief Check if statement is pending.
@@ -69,7 +69,7 @@ public:
      * @retval nullptr when there's no result set.
      * @throw std::logic_error in case of failure to execute the statement.
      */
-    virtual std::shared_ptr<IResultSet> execute() = 0;
+    virtual std::shared_ptr<ResultSet> execute() = 0;
 
     /**
      * @brief Bind unsigned integer (8-bits).

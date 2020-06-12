@@ -152,7 +152,7 @@ TEST_F(SQLiteDatabaseTest, MoveDatabaseToItselfDoNotCloseIt) {
 }
 
 TEST_F(SQLiteDatabaseTest, DestructorClosesDatabase) {
-    std::shared_ptr<IDatabase> database = std::make_shared<SQLiteDatabase>("tmp.db");
+    std::shared_ptr<Database> database = std::make_shared<SQLiteDatabase>("tmp.db");
     EXPECT_CALL(*mock_, sqlite3_close);
     database.reset();
 }

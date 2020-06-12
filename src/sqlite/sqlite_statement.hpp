@@ -44,7 +44,7 @@ class SQLiteDatabase;
  *
  * A SQLite statement object manages a single SQL query for a SQLite database.
  */
-class SQLiteStatement : public IStatement, public std::enable_shared_from_this<SQLiteStatement> {
+class SQLiteStatement : public Statement, public std::enable_shared_from_this<SQLiteStatement> {
 public:
     /**
      * @brief Create SQLite statement.
@@ -116,7 +116,7 @@ public:
      * @retval nullptr when there's no result set.
      * @throw std::logic_error in case of failure to execute the statement.
      */
-    std::shared_ptr<IResultSet> execute() override;
+    std::shared_ptr<ResultSet> execute() override;
 
     /**
      * @brief Bind unsigned integer (8-bits).

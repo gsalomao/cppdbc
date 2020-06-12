@@ -41,13 +41,13 @@ protected:
     void TearDown() override;
 
     void checkGetDataType(uint16_t index, uint16_t sqliteType,
-            IResultSet::DataType expectedType);
+            ResultSet::DataType expectedType);
 
     std::shared_ptr<SQLite3Mock> mock_;
 
     sqlite3_stmt* fakeStmt_{nullptr};
     std::shared_ptr<SQLiteDatabase> database_;
-    std::shared_ptr<IResultSet> resultSet_;
+    std::shared_ptr<ResultSet> resultSet_;
 };
 
 void SQLiteResultSetTest::SetUp() {
@@ -78,7 +78,7 @@ void SQLiteResultSetTest::TearDown() {
 }
 
 void SQLiteResultSetTest::checkGetDataType(uint16_t index, uint16_t sqliteType,
-        IResultSet::DataType expectedType) {
+        ResultSet::DataType expectedType) {
 
     EXPECT_CALL(*mock_, sqlite3_column_type(fakeStmt_, index))
             .WillOnce(Return(sqliteType));
@@ -121,19 +121,19 @@ TEST_F(SQLiteResultSetTest, NextWithInvalidStatementThrowsException) {
 }
 
 TEST_F(SQLiteResultSetTest, GetDataTypeInteger) {
-    checkGetDataType(2, SQLITE_INTEGER, IResultSet::DataType::INTEGER);
+    checkGetDataType(2, SQLITE_INTEGER, ResultSet::DataType::INTEGER);
 }
 
 TEST_F(SQLiteResultSetTest, GetDataTypeFloat) {
-    checkGetDataType(1, SQLITE_FLOAT, IResultSet::DataType::FLOAT);
+    checkGetDataType(1, SQLITE_FLOAT, ResultSet::DataType::FLOAT);
 }
 
 TEST_F(SQLiteResultSetTest, GetDataTypeText) {
-    checkGetDataType(5, SQLITE_TEXT, IResultSet::DataType::TEXT);
+    checkGetDataType(5, SQLITE_TEXT, ResultSet::DataType::TEXT);
 }
 
 TEST_F(SQLiteResultSetTest, GetDataTypeBlob) {
-    checkGetDataType(8, SQLITE_BLOB, IResultSet::DataType::BLOB);
+    checkGetDataType(8, SQLITE_BLOB, ResultSet::DataType::BLOB);
 }
 
 TEST_F(SQLiteResultSetTest, GetUnsignedInteger8) {

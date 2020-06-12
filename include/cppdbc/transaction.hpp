@@ -35,14 +35,14 @@ namespace cppdbc {
  *
  * A transaction objects manages a SQL transaction.
  */
-class ITransaction {
+class Transaction {
 public:
     /**
      * @brief Destroy transaction.
      *
      * Destructor of the transaction.
      */
-    virtual ~ITransaction() = default;
+    virtual ~Transaction() = default;
 
     /**
      * @brief Check if transaction is pending.

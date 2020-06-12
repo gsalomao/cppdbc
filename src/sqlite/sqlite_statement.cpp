@@ -80,7 +80,7 @@ bool SQLiteStatement::pending() {
     return pending_;
 }
 
-std::shared_ptr<IResultSet> SQLiteStatement::execute() {
+std::shared_ptr<ResultSet> SQLiteStatement::execute() {
     if (!pending_) {
         throw std::logic_error("Statement already executed");
     }

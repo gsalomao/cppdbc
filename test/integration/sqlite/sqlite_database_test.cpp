@@ -38,7 +38,7 @@ protected:
     void SetUp() override;
     void TearDown() override;
 
-    std::shared_ptr<IDatabase> database_;
+    std::shared_ptr<Database> database_;
 };
 
 void SQLiteDatabaseTest::SetUp() {

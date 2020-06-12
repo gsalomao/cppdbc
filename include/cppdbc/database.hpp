@@ -41,14 +41,14 @@ namespace cppdbc {
  *
  * The database object manages the connection with the database.
  */
-class IDatabase {
+class Database {
 public:
     /**
      * @brief Destroy database.
      *
      * Destructor of the database connection.
      */
-    virtual ~IDatabase() = default;
+    virtual ~Database() = default;
 
     /**
      * @brief Check if database is valid.
@@ -72,7 +72,7 @@ public:
      * @throw std::invalid_argument in case of invalid query.
      * @throw std::logic_error in case of failure to create statement.
      */
-    virtual std::shared_ptr<IStatement> createStatement(const std::string& query) = 0;
+    virtual std::shared_ptr<Statement> createStatement(const std::string& query) = 0;
 
     /**
      * @brief Create transaction.
@@ -83,7 +83,7 @@ public:
      * @return Pointer to the created transaction.
      * @throw std::logic_error in case of failure to create transaction.
      */
-    virtual std::shared_ptr<ITransaction> createTransaction() = 0;
+    virtual std::shared_ptr<Transaction> createTransaction() = 0;
 
     /**
      * @brief Check if table exists.

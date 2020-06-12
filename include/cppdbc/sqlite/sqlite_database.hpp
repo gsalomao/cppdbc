@@ -45,7 +45,7 @@ class SQLiteTransaction;
  *
  * The database object manages the connection with the SQLite database.
  */
-class SQLiteDatabase : public IDatabase, public std::enable_shared_from_this<SQLiteDatabase> {
+class SQLiteDatabase : public Database, public std::enable_shared_from_this<SQLiteDatabase> {
 public:
     /**
      * @brief Database mode.
@@ -140,7 +140,7 @@ public:
      * @throw std::invalid_argument in case of invalid query.
      * @throw std::logic_error in case of failure to create statement.
      */
-    std::shared_ptr<IStatement> createStatement(const std::string& query) override;
+    std::shared_ptr<Statement> createStatement(const std::string& query) override;
 
     /**
      * @brief Create transaction.
@@ -151,7 +151,7 @@ public:
      * @return Pointer to the created transaction.
      * @throw std::logic_error in case of failure to create transaction.
      */
-    std::shared_ptr<ITransaction> createTransaction() override;
+    std::shared_ptr<Transaction> createTransaction() override;
 
     /**
      * @brief Check if table exists.

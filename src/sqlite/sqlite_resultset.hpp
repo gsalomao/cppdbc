@@ -43,7 +43,7 @@ class SQLiteStatement;
  *
  * A SQLite result set object manages the result from a SQLite statement.
  */
-class SQLiteResultSet : public IResultSet {
+class SQLiteResultSet : public ResultSet {
 public:
     /**
      * @brief Create SQLite result set.

@@ -71,7 +71,7 @@ bool SQLiteDatabase::valid() const noexcept {
     return this->sqlite_;
 }
 
-std::shared_ptr<IStatement> SQLiteDatabase::createStatement(const std::string& sql) {
+std::shared_ptr<Statement> SQLiteDatabase::createStatement(const std::string& sql) {
     if (this->sqlite_ == nullptr) {
         throw std::logic_error("Cannot create statement for invalid database");
     }
@@ -79,7 +79,7 @@ std::shared_ptr<IStatement> SQLiteDatabase::createStatement(const std::string& s
     return std::make_shared<SQLiteStatement>(shared_from_this(), sql);
 }
 
-std::shared_ptr<ITransaction> SQLiteDatabase::createTransaction() {
+std::shared_ptr<Transaction> SQLiteDatabase::createTransaction() {
     return std::make_shared<SQLiteTransaction>(shared_from_this());
 }
 

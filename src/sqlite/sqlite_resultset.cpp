@@ -52,7 +52,7 @@ bool SQLiteResultSet::next() {
     return pending_;
 }
 
-IResultSet::DataType SQLiteResultSet::dataType(column_t column) const {
+ResultSet::DataType SQLiteResultSet::dataType(column_t column) const {
     int result = sqlite3_column_type(statement_->statement_, column);
 
     switch (result) {
@@ -143,7 +143,7 @@ std::unique_ptr<const void*> SQLiteResultSet::blob(column_t column, size_t* size
     return std::make_unique<const void*>(blob);
 }
 
-void SQLiteResultSet::expectDataType(column_t column, IResultSet::DataType type) const {
+void SQLiteResultSet::expectDataType(column_t column, ResultSet::DataType type) const {
     if (dataType(column) != type) {
         throw std::invalid_argument("Column doesn't have the expected data type");
     }

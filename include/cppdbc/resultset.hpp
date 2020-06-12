@@ -45,7 +45,7 @@ typedef uint16_t column_t;
  *
  * A result set object manages the result from a statement.
  */
-class IResultSet {
+class ResultSet {
 public:
     /**
      * @brief Data type.
@@ -64,7 +64,7 @@ public:
      *
      * Destructor of the result set.
      */
-    virtual ~IResultSet() = default;
+    virtual ~ResultSet() = default;
 
     /**
      * @brief Next result set.
