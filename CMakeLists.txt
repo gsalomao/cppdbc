@@ -18,6 +18,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+# =============================================================================
+# Setup
+# =============================================================================
+
 cmake_minimum_required(VERSION 3.13)
 project(cppdbc LANGUAGES CXX)
 
@@ -32,7 +36,12 @@ if (${PROJECT_SOURCE_DIR} STREQUAL ${PROJECT_BINARY_DIR})
     "there.")
 endif ()
 
+# =============================================================================
+# Flags
+# =============================================================================
+
 option(ENABLE_COVERAGE "Enable test coverage" NO)
+
 if (ENABLE_COVERAGE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
   set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
@@ -48,22 +57,33 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -s")
 
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
+# =============================================================================
+# Software Version
+# =============================================================================
+
 include(GitVersion)
 message(STATUS "Project version: ${PROJECT_VERSION}")
-message(STATUS "Project will be installed into ${CMAKE_INSTALL_PREFIX}")
 
-add_library(${PROJECT_NAME})
-set_target_properties(${PROJECT_NAME} PROPERTIES
-  VERSION ${PROJECT_VERSION}
-  SOVERSION ${PROJECT_VERSION_MAJOR})
+# =============================================================================
+# Libraries
+# =============================================================================
 
 include_directories(include)
 include_directories(src)
 add_subdirectory(src)
-add_subdirectory(docs)
+
+message(STATUS "Build type set to ${CMAKE_BUILD_TYPE}")
+
+# =============================================================================
+# Tests
+# =============================================================================
 
 enable_testing()
 add_subdirectory(test)
+
+# =============================================================================
+# Static Analysis
+# =============================================================================
 
 find_program(CPPCHECK cppcheck)
 
@@ -83,6 +103,16 @@ else ()
   message(WARNING "No cppcheck found! Static check disabled.")
 endif ()
 
+# =============================================================================
+# Documentation
+# =============================================================================
+
+add_subdirectory(docs)
+
+# =============================================================================
+# Installation
+# =============================================================================
+
 include(GNUInstallDirs)
-install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_LIBDIR})
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+message(STATUS "Installation into ${CMAKE_INSTALL_PREFIX}")

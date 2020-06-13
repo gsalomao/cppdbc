@@ -18,12 +18,32 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-find_package(SQLite3 REQUIRED)
+# =============================================================================
+# Library
+# =============================================================================
 
-target_link_libraries(${PROJECT_NAME} PUBLIC SQLite::SQLite3)
+add_library(${PROJECT_NAME}-sqlite)
+add_library(${PROJECT_NAME}::sqlite ALIAS ${PROJECT_NAME}-sqlite)
 
-target_sources(${PROJECT_NAME} PRIVATE
+set_target_properties(${PROJECT_NAME}-sqlite PROPERTIES
+  VERSION ${PROJECT_VERSION}
+  SOVERSION ${PROJECT_VERSION_MAJOR})
+
+target_sources(${PROJECT_NAME}-sqlite PRIVATE
   sqlite_database.cpp
   sqlite_resultset.cpp
   sqlite_statement.cpp
   sqlite_transaction.cpp)
+
+# =============================================================================
+# Dependencies
+# =============================================================================
+
+find_package(SQLite3 REQUIRED)
+target_link_libraries(${PROJECT_NAME}-sqlite PUBLIC SQLite::SQLite3)
+
+# =============================================================================
+# Installation
+# =============================================================================
+
+install(TARGETS ${PROJECT_NAME}-sqlite DESTINATION ${CMAKE_INSTALL_LIBDIR})
