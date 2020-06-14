@@ -22,14 +22,18 @@
 # Library
 # =============================================================================
 
-add_library(${PROJECT_NAME}-sqlite)
-add_library(${PROJECT_NAME}::sqlite ALIAS ${PROJECT_NAME}-sqlite)
+set(DATABASE sqlite)
+set(LIBRARY_NAME ${PROJECT_NAME}-${DATABASE})
 
-set_target_properties(${PROJECT_NAME}-sqlite PROPERTIES
+add_library(${LIBRARY_NAME})
+add_library(${PROJECT_NAME}::${DATABASE} ALIAS ${LIBRARY_NAME})
+
+set_target_properties(${LIBRARY_NAME} PROPERTIES
   VERSION ${PROJECT_VERSION}
-  SOVERSION ${PROJECT_VERSION_MAJOR})
+  SOVERSION ${PROJECT_VERSION_MAJOR}
+  EXPORT_NAME ${PROJECT_NAME}::${DATABASE})
 
-target_sources(${PROJECT_NAME}-sqlite PRIVATE
+target_sources(${LIBRARY_NAME} PRIVATE
   sqlite_database.cpp
   sqlite_resultset.cpp
   sqlite_statement.cpp
@@ -40,10 +44,10 @@ target_sources(${PROJECT_NAME}-sqlite PRIVATE
 # =============================================================================
 
 find_package(SQLite3 REQUIRED)
-target_link_libraries(${PROJECT_NAME}-sqlite PRIVATE SQLite::SQLite3)
+target_link_libraries(${LIBRARY_NAME} PRIVATE SQLite::SQLite3)
 
 # =============================================================================
 # Installation
 # =============================================================================
 
-install(TARGETS ${PROJECT_NAME}-sqlite DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(TARGETS ${LIBRARY_NAME} DESTINATION ${CMAKE_INSTALL_LIBDIR})
