@@ -61,9 +61,9 @@ public:
     };
 
     /**
-    * @brief Create SQLite database.
+    * @brief Create SQLite database in read-only mode.
     *
-    * Constructor of the SQLite database.
+    * Constructor of the SQLite database to create it in read-only mode.
     *
     * @param[in] filename Path to the database file.
     *
