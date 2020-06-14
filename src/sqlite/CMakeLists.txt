@@ -39,6 +39,10 @@ target_sources(${LIBRARY_NAME} PRIVATE
   sqlite_statement.cpp
   sqlite_transaction.cpp)
 
+target_include_directories(${LIBRARY_NAME} PUBLIC
+  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>)
+
 # =============================================================================
 # Dependencies
 # =============================================================================
@@ -50,4 +54,30 @@ target_link_libraries(${LIBRARY_NAME} PRIVATE SQLite::SQLite3)
 # Installation
 # =============================================================================
 
-install(TARGETS ${LIBRARY_NAME} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+include(GNUInstallDirs)
+install(TARGETS ${LIBRARY_NAME}
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}
+  EXPORT ${LIBRARY_NAME}-targets)
+
+install(EXPORT ${LIBRARY_NAME}-targets
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}/cmake)
+
+export(TARGETS ${LIBRARY_NAME}
+  FILE ${CMAKE_BINARY_DIR}/${LIBRARY_NAME}-exports.cmake)
+
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+  ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}-config-version.cmake
+  VERSION ${PROJECT_VERSION}
+  COMPATIBILITY AnyNewerVersion)
+
+configure_package_config_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${LIBRARY_NAME}-config.cmake.in
+  ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}-config.cmake
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}/cmake)
+
+install(
+  FILES
+    ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}-config.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}-config-version.cmake
+  DESTINATION ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}/cmake)
