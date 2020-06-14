@@ -40,7 +40,7 @@ target_sources(${PROJECT_NAME}-sqlite PRIVATE
 # =============================================================================
 
 find_package(SQLite3 REQUIRED)
-target_link_libraries(${PROJECT_NAME}-sqlite PUBLIC SQLite::SQLite3)
+target_link_libraries(${PROJECT_NAME}-sqlite PRIVATE SQLite::SQLite3)
 
 # =============================================================================
 # Installation
