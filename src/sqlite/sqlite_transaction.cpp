@@ -47,7 +47,7 @@ SQLiteTransaction::SQLiteTransaction(SQLiteTransaction&& other) noexcept:
 
 SQLiteTransaction::~SQLiteTransaction() {
     if (pending_) {
-        executeStatement("ROLLBACK;");
+        execute_statement("ROLLBACK;");
     }
 }
 
@@ -63,7 +63,7 @@ SQLiteTransaction& SQLiteTransaction::operator=(SQLiteTransaction&& other) noexc
     return *this;
 }
 
-bool SQLiteTransaction::isPending() {
+bool SQLiteTransaction::pending() {
     return pending_;
 }
 
@@ -76,7 +76,7 @@ void SQLiteTransaction::commit() {
         throw std::logic_error("Cannot commit transaction with invalid database");
     }
 
-    int result = executeStatement("COMMIT;");
+    int result = execute_statement("COMMIT;");
     pending_ = false;
 
     if (result != SQLITE_OK) {
@@ -93,7 +93,7 @@ void SQLiteTransaction::rollback() {
         throw std::logic_error("Cannot commit transaction with invalid database");
     }
 
-    int result = executeStatement("ROLLBACK;");
+    int result = execute_statement("ROLLBACK;");
     pending_ = false;
 
     if (result != SQLITE_OK) {
@@ -101,7 +101,7 @@ void SQLiteTransaction::rollback() {
     }
 }
 
-int SQLiteTransaction::executeStatement(const std::string& stmt) {
+int SQLiteTransaction::execute_statement(const std::string& stmt) {
     return sqlite3_exec(database_->sqlite_, stmt.c_str(), nullptr, nullptr,
             nullptr);
 }

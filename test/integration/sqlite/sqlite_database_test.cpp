@@ -87,47 +87,47 @@ TEST_F(SQLiteDatabaseTest, CreateDatabaseInReadWriteModeWhenExists) {
 }
 
 TEST_F(SQLiteDatabaseTest, CreateStatementWithInvalidSQLThrowsException) {
-    EXPECT_THROW(database_->createStatement("SELECT SQLITE_"),
+    EXPECT_THROW(database_->create_statement("SELECT SQLITE_"),
             std::invalid_argument);
 }
 
 TEST_F(SQLiteDatabaseTest, ExecuteStatement) {
-    auto statement = database_->createStatement(SQL_GET_VERSION);
+    auto statement = database_->create_statement(SQL_GET_VERSION);
     auto result = statement->execute();
     EXPECT_NE(result, nullptr);
 }
 
 TEST_F(SQLiteDatabaseTest, ExecuteStatementWithoutOutputReturnsNullptr) {
-    auto statement = database_->createStatement(SQL_CREATE_TABLE_INT);
+    auto statement = database_->create_statement(SQL_CREATE_TABLE_INT);
     EXPECT_EQ(statement->execute(), nullptr);
 }
 
 TEST_F(SQLiteDatabaseTest, ExecuteStatemetViolatesConstraintThrowsException) {
-    auto statement = database_->createStatement(SQL_CREATE_TABLE_INT);
+    auto statement = database_->create_statement(SQL_CREATE_TABLE_INT);
     statement->execute();
 
-    statement = database_->createStatement(SQL_INSERT_VALUE);
+    statement = database_->create_statement(SQL_INSERT_VALUE);
     statement->bind(1, 0);
     statement->execute();
 
-    statement = database_->createStatement(SQL_INSERT_VALUE);
+    statement = database_->create_statement(SQL_INSERT_VALUE);
     statement->bind(1, 0);
     EXPECT_THROW(statement->execute(), std::logic_error);
 }
 
 TEST_F(SQLiteDatabaseTest, GetResultSet) {
-    auto statement = database_->createStatement(SQL_CREATE_TABLE_INT);
+    auto statement = database_->create_statement(SQL_CREATE_TABLE_INT);
     statement->execute();
 
-    statement = database_->createStatement(SQL_INSERT_VALUE);
+    statement = database_->create_statement(SQL_INSERT_VALUE);
     statement->bind(1, 0);
     statement->execute();
 
-    statement = database_->createStatement(SQL_INSERT_VALUE);
+    statement = database_->create_statement(SQL_INSERT_VALUE);
     statement->bind(2, 0);
     statement->execute();
 
-    statement = database_->createStatement(SQL_SELECT_VALUE);
+    statement = database_->create_statement(SQL_SELECT_VALUE);
     auto result = statement->execute();
     EXPECT_EQ(result->uint8(0), 1);
 
@@ -139,63 +139,63 @@ TEST_F(SQLiteDatabaseTest, GetResultSet) {
 }
 
 TEST_F(SQLiteDatabaseTest, CheckIfTableExists) {
-    EXPECT_FALSE(database_->hasTable("test"));
+    EXPECT_FALSE(database_->has_table("test"));
 
-    auto statement = database_->createStatement(SQL_CREATE_TABLE_TEXT);
+    auto statement = database_->create_statement(SQL_CREATE_TABLE_TEXT);
     statement->execute();
 
-    EXPECT_TRUE(database_->hasTable("test"));
+    EXPECT_TRUE(database_->has_table("test"));
 }
 
 TEST_F(SQLiteDatabaseTest, CreateTransaction) {
-    auto transaction = database_->createTransaction();
+    auto transaction = database_->create_transaction();
     EXPECT_NE(transaction, nullptr);
 }
 
 TEST_F(SQLiteDatabaseTest, CommitTransaction) {
-    auto statement = database_->createStatement(SQL_CREATE_TABLE_INT);
+    auto statement = database_->create_statement(SQL_CREATE_TABLE_INT);
     statement->execute();
 
-    auto transaction = database_->createTransaction();
+    auto transaction = database_->create_transaction();
 
-    statement = database_->createStatement(SQL_INSERT_VALUE);
+    statement = database_->create_statement(SQL_INSERT_VALUE);
     statement->bind(1, 0);
     statement->execute();
 
     auto database2 = std::make_shared<SQLiteDatabase>("test.db",
             SQLiteDatabase::SQLiteMode::READ_ONLY);
 
-    statement = database2->createStatement(SQL_SELECT_VALUE);
+    statement = database2->create_statement(SQL_SELECT_VALUE);
     ASSERT_EQ(statement->execute(), nullptr);
 
     ASSERT_NO_THROW(transaction->commit());
 
-    statement = database2->createStatement(SQL_SELECT_VALUE);
+    statement = database2->create_statement(SQL_SELECT_VALUE);
     auto result = statement->execute();
     ASSERT_NE(result, nullptr);
     EXPECT_EQ(result->uint8(0), 1);
 }
 
 TEST_F(SQLiteDatabaseTest, CommitTransactionThrowsExceptionWhenFailure) {
-    auto statement = database_->createStatement(SQL_CREATE_TABLE_INT);
+    auto statement = database_->create_statement(SQL_CREATE_TABLE_INT);
     statement->execute();
 
-    statement = database_->createStatement(SQL_INSERT_VALUE);
+    statement = database_->create_statement(SQL_INSERT_VALUE);
     statement->bind(1, 0);
     statement->execute();
 
-    statement = database_->createStatement(SQL_INSERT_VALUE);
+    statement = database_->create_statement(SQL_INSERT_VALUE);
     statement->bind(2, 0);
     statement->execute();
 
-    statement = database_->createStatement(SQL_SELECT_VALUE);
+    statement = database_->create_statement(SQL_SELECT_VALUE);
     auto result = statement->execute();
 
     auto database2 = std::make_shared<SQLiteDatabase>("test.db",
             SQLiteDatabase::SQLiteMode::READ_WRITE);
 
-    auto transaction = database2->createTransaction();
-    statement = database2->createStatement(SQL_INSERT_VALUE);
+    auto transaction = database2->create_transaction();
+    statement = database2->create_statement(SQL_INSERT_VALUE);
     statement->bind(3, 0);
     statement->execute();
 
@@ -205,29 +205,29 @@ TEST_F(SQLiteDatabaseTest, CommitTransactionThrowsExceptionWhenFailure) {
 }
 
 TEST_F(SQLiteDatabaseTest, RollbackTransaction) {
-    auto statement = database_->createStatement(SQL_CREATE_TABLE_INT);
+    auto statement = database_->create_statement(SQL_CREATE_TABLE_INT);
     statement->execute();
 
-    auto transaction = database_->createTransaction();
+    auto transaction = database_->create_transaction();
 
-    statement = database_->createStatement(SQL_INSERT_VALUE);
+    statement = database_->create_statement(SQL_INSERT_VALUE);
     statement->bind(1, 0);
     statement->execute();
 
     ASSERT_NO_THROW(transaction->rollback());
 
-    statement = database_->createStatement(SQL_SELECT_VALUE);
+    statement = database_->create_statement(SQL_SELECT_VALUE);
     EXPECT_EQ(statement->execute(), nullptr);
 }
 
 TEST_F(SQLiteDatabaseTest, RollbackNonCommittedTransactionOnDestructor) {
-    auto statement = database_->createStatement(SQL_CREATE_TABLE_INT);
+    auto statement = database_->create_statement(SQL_CREATE_TABLE_INT);
     statement->execute();
 
     {
-        auto transaction = database_->createTransaction();
+        auto transaction = database_->create_transaction();
 
-        statement = database_->createStatement(SQL_INSERT_VALUE);
+        statement = database_->create_statement(SQL_INSERT_VALUE);
         statement->bind(1, 0);
         statement->execute();
     }
@@ -235,17 +235,17 @@ TEST_F(SQLiteDatabaseTest, RollbackNonCommittedTransactionOnDestructor) {
     auto database2 = std::make_shared<SQLiteDatabase>("test.db",
             SQLiteDatabase::SQLiteMode::READ_ONLY);
 
-    statement = database2->createStatement(SQL_SELECT_VALUE);
+    statement = database2->create_statement(SQL_SELECT_VALUE);
     EXPECT_EQ(statement->execute(), nullptr);
 }
 
 TEST_F(SQLiteDatabaseTest, CommitTransactionMoreThanOnceThrowsException) {
-    auto statement = database_->createStatement(SQL_CREATE_TABLE_INT);
+    auto statement = database_->create_statement(SQL_CREATE_TABLE_INT);
     statement->execute();
 
-    auto transaction = database_->createTransaction();
+    auto transaction = database_->create_transaction();
 
-    statement = database_->createStatement(SQL_INSERT_VALUE);
+    statement = database_->create_statement(SQL_INSERT_VALUE);
     statement->bind(1, 0);
     statement->execute();
 
@@ -254,12 +254,12 @@ TEST_F(SQLiteDatabaseTest, CommitTransactionMoreThanOnceThrowsException) {
 }
 
 TEST_F(SQLiteDatabaseTest, RollbackTransactionMoreThanOnceThrowsException) {
-    auto statement = database_->createStatement(SQL_CREATE_TABLE_INT);
+    auto statement = database_->create_statement(SQL_CREATE_TABLE_INT);
     statement->execute();
 
-    auto transaction = database_->createTransaction();
+    auto transaction = database_->create_transaction();
 
-    statement = database_->createStatement(SQL_INSERT_VALUE);
+    statement = database_->create_statement(SQL_INSERT_VALUE);
     statement->bind(1, 0);
     statement->execute();
 
@@ -268,19 +268,19 @@ TEST_F(SQLiteDatabaseTest, RollbackTransactionMoreThanOnceThrowsException) {
 }
 
 TEST_F(SQLiteDatabaseTest, ExecuteStatementWhileOtherTransactionIsOpenedThrowsException) {
-    auto statement = database_->createStatement(SQL_CREATE_TABLE_INT);
+    auto statement = database_->create_statement(SQL_CREATE_TABLE_INT);
     statement->execute();
 
     auto database2 = std::make_shared<SQLiteDatabase>("test.db",
             SQLiteDatabase::SQLiteMode::READ_WRITE);
 
-    auto transaction = database2->createTransaction();
+    auto transaction = database2->create_transaction();
 
-    statement = database2->createStatement(SQL_INSERT_VALUE);
+    statement = database2->create_statement(SQL_INSERT_VALUE);
     statement->bind(1, 0);
     statement->execute();
 
-    statement = database_->createStatement(SQL_INSERT_VALUE);
+    statement = database_->create_statement(SQL_INSERT_VALUE);
     statement->bind(2, 0);
     EXPECT_THROW(statement->execute(), std::logic_error);
 }

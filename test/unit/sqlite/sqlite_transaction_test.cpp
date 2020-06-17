@@ -41,7 +41,7 @@ protected:
 
     void TearDown() override;
 
-    sqlite3* fakeSQLite_{nullptr};
+    sqlite3* fake_sqlite_{nullptr};
 
     std::shared_ptr<SQLite3Mock> mock_;
     std::shared_ptr<SQLiteTransaction> transaction_;
@@ -50,21 +50,21 @@ protected:
 
 void SQLiteTransactionTest::SetUp() {
     mock_ = std::make_shared<NiceMock<SQLite3Mock>>();
-    SQLite3Mock::registerMock(mock_);
+    SQLite3Mock::register_mock(mock_);
 
-    fakeSQLite_ = reinterpret_cast<sqlite3*>(new int(1));
+    fake_sqlite_ = reinterpret_cast<sqlite3*>(new int(1));
 
     ON_CALL(*mock_, sqlite3_open_v2)
-            .WillByDefault(DoAll(SetArgPointee<1>(fakeSQLite_), Return(SQLITE_OK)));
+            .WillByDefault(DoAll(SetArgPointee<1>(fake_sqlite_), Return(SQLITE_OK)));
 
     database_ = std::make_shared<SQLiteDatabase>("tmp.db");
     transaction_ = std::make_shared<SQLiteTransaction>(database_);
 }
 
 void SQLiteTransactionTest::TearDown() {
-    delete reinterpret_cast<int*>(fakeSQLite_);
+    delete reinterpret_cast<int*>(fake_sqlite_);
 
-    if (transaction_->isPending()) {
+    if (transaction_->pending()) {
         EXPECT_CALL(*mock_, sqlite3_exec);
     }
 
@@ -89,17 +89,17 @@ TEST_F(SQLiteTransactionTest, ConstructorWithDatabaseThrowsException) {
 TEST_F(SQLiteTransactionTest, MoveTransaction) {
     auto transaction1 = SQLiteTransaction(database_);
     auto transaction2{std::move(transaction1)};
-    EXPECT_TRUE(transaction2.isPending());
+    EXPECT_TRUE(transaction2.pending());
 
     auto transaction3 = std::make_shared<SQLiteTransaction>(database_);
     *transaction_ = std::move(*transaction3);
-    EXPECT_TRUE(transaction_->isPending());
+    EXPECT_TRUE(transaction_->pending());
 }
 
 TEST_F(SQLiteTransactionTest, MoveTransactionToItselfDoNothing) {
     auto transaction = transaction_;
     *transaction_ = std::move(*transaction);
-    EXPECT_TRUE(transaction_->isPending());
+    EXPECT_TRUE(transaction_->pending());
 }
 
 TEST_F(SQLiteTransactionTest, DestructorCallsExec) {
@@ -115,9 +115,9 @@ TEST_F(SQLiteTransactionTest, CommitTransactionCallsExec) {
 }
 
 TEST_F(SQLiteTransactionTest, TransactionNotPendingAfterCommit) {
-    EXPECT_TRUE(transaction_->isPending());
+    EXPECT_TRUE(transaction_->pending());
     transaction_->commit();
-    EXPECT_FALSE(transaction_->isPending());
+    EXPECT_FALSE(transaction_->pending());
 }
 
 TEST_F(SQLiteTransactionTest, CommitNonPendingTransactionThrowsException) {
@@ -149,9 +149,9 @@ TEST_F(SQLiteTransactionTest, RollbackTransactionCallsExec) {
 }
 
 TEST_F(SQLiteTransactionTest, TransactionNotPendingAfterRollback) {
-    EXPECT_TRUE(transaction_->isPending());
+    EXPECT_TRUE(transaction_->pending());
     transaction_->rollback();
-    EXPECT_FALSE(transaction_->isPending());
+    EXPECT_FALSE(transaction_->pending());
 }
 
 TEST_F(SQLiteTransactionTest, RollbackNonPendingTransactionThrowsException) {

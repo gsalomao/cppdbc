@@ -30,7 +30,7 @@ SQLiteDatabase::SQLiteDatabase(const std::string& filename) :
         SQLiteDatabase(filename, SQLiteMode::READ_ONLY) {}
 
 SQLiteDatabase::SQLiteDatabase(const std::string& filename, SQLiteMode mode) {
-    int32_t flags = parseSQLiteMode(mode);
+    int32_t flags = parse_sqlite_mode(mode);
 
     int result = sqlite3_open_v2(filename.c_str(), &sqlite_, flags, nullptr);
 
@@ -71,7 +71,7 @@ bool SQLiteDatabase::valid() const noexcept {
     return this->sqlite_;
 }
 
-std::shared_ptr<Statement> SQLiteDatabase::createStatement(const std::string& sql) {
+std::shared_ptr<Statement> SQLiteDatabase::create_statement(const std::string& sql) {
     if (this->sqlite_ == nullptr) {
         throw std::logic_error("Cannot create statement for invalid database");
     }
@@ -79,11 +79,11 @@ std::shared_ptr<Statement> SQLiteDatabase::createStatement(const std::string& sq
     return std::make_shared<SQLiteStatement>(shared_from_this(), sql);
 }
 
-std::shared_ptr<Transaction> SQLiteDatabase::createTransaction() {
+std::shared_ptr<Transaction> SQLiteDatabase::create_transaction() {
     return std::make_shared<SQLiteTransaction>(shared_from_this());
 }
 
-int32_t SQLiteDatabase::parseSQLiteMode(SQLiteDatabase::SQLiteMode mode) {
+int32_t SQLiteDatabase::parse_sqlite_mode(SQLiteDatabase::SQLiteMode mode) {
     switch (mode) {
         default:
             return SQLITE_OPEN_READONLY;
@@ -102,8 +102,8 @@ int32_t SQLiteDatabase::parseSQLiteMode(SQLiteDatabase::SQLiteMode mode) {
     }
 }
 
-bool SQLiteDatabase::hasTable(const std::string& tableName) {
-    auto statement = createStatement(
+bool SQLiteDatabase::has_table(const std::string& tableName) {
+    auto statement = create_statement(
             "SELECT count(*) FROM sqlite_master WHERE type='table' AND name=?");
 
     statement->bind(tableName, 0);

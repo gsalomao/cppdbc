@@ -52,7 +52,7 @@ bool SQLiteResultSet::next() {
     return pending_;
 }
 
-ResultSet::DataType SQLiteResultSet::dataType(column_t column) const {
+ResultSet::DataType SQLiteResultSet::data_type(column_t column) const {
     int result = sqlite3_column_type(statement_->statement_, column);
 
     switch (result) {
@@ -70,57 +70,57 @@ ResultSet::DataType SQLiteResultSet::dataType(column_t column) const {
 }
 
 uint8_t SQLiteResultSet::uint8(column_t column) const {
-    expectDataType(column, DataType::INTEGER);
+    check_data_type(column, DataType::INTEGER);
     return static_cast<uint8_t>(sqlite3_column_int(statement_->statement_, column));
 }
 
 uint16_t SQLiteResultSet::uint16(column_t column) const {
-    expectDataType(column, DataType::INTEGER);
+    check_data_type(column, DataType::INTEGER);
     return static_cast<uint16_t>(sqlite3_column_int(statement_->statement_, column));
 }
 
 uint32_t SQLiteResultSet::uint32(column_t column) const {
-    expectDataType(column, DataType::INTEGER);
+    check_data_type(column, DataType::INTEGER);
     return static_cast<uint32_t>(sqlite3_column_int(statement_->statement_, column));
 }
 
 uint64_t SQLiteResultSet::uint64(column_t column) const {
-    expectDataType(column, DataType::INTEGER);
+    check_data_type(column, DataType::INTEGER);
     return static_cast<uint64_t>(sqlite3_column_int64(statement_->statement_, column));
 }
 
 int8_t SQLiteResultSet::int8(column_t column) const {
-    expectDataType(column, DataType::INTEGER);
+    check_data_type(column, DataType::INTEGER);
     return static_cast<int8_t>(sqlite3_column_int(statement_->statement_, column));
 }
 
 int16_t SQLiteResultSet::int16(column_t column) const {
-    expectDataType(column, DataType::INTEGER);
+    check_data_type(column, DataType::INTEGER);
     return static_cast<int16_t>(sqlite3_column_int(statement_->statement_, column));
 }
 
 int32_t SQLiteResultSet::int32(column_t column) const {
-    expectDataType(column, DataType::INTEGER);
+    check_data_type(column, DataType::INTEGER);
     return static_cast<int32_t>(sqlite3_column_int(statement_->statement_, column));
 }
 
 int64_t SQLiteResultSet::int64(column_t column) const {
-    expectDataType(column, DataType::INTEGER);
+    check_data_type(column, DataType::INTEGER);
     return sqlite3_column_int64(statement_->statement_, column);
 }
 
 float SQLiteResultSet::flt(column_t column) const {
-    expectDataType(column, DataType::FLOAT);
+    check_data_type(column, DataType::FLOAT);
     return static_cast<float>(sqlite3_column_double(statement_->statement_, column));
 }
 
 double SQLiteResultSet::dbl(column_t column) const {
-    expectDataType(column, DataType::FLOAT);
+    check_data_type(column, DataType::FLOAT);
     return sqlite3_column_double(statement_->statement_, column);
 }
 
 std::string SQLiteResultSet::str(column_t column) const {
-    expectDataType(column, DataType::TEXT);
+    check_data_type(column, DataType::TEXT);
     const unsigned char* result = sqlite3_column_text(statement_->statement_, column);
 
     return std::string(reinterpret_cast<const char*>(result));
@@ -131,7 +131,7 @@ std::unique_ptr<const void*> SQLiteResultSet::blob(column_t column, size_t* size
         throw std::invalid_argument("Size's pointer cannot be null");
     }
 
-    expectDataType(column, DataType::BLOB);
+    check_data_type(column, DataType::BLOB);
     *size = static_cast<size_t>(sqlite3_column_bytes(statement_->statement_, column));
 
     if (!(*size)) {
@@ -143,8 +143,8 @@ std::unique_ptr<const void*> SQLiteResultSet::blob(column_t column, size_t* size
     return std::make_unique<const void*>(blob);
 }
 
-void SQLiteResultSet::expectDataType(column_t column, ResultSet::DataType type) const {
-    if (dataType(column) != type) {
+void SQLiteResultSet::check_data_type(column_t column, ResultSet::DataType type) const {
+    if (data_type(column) != type) {
         throw std::invalid_argument("Column doesn't have the expected data type");
     }
 }

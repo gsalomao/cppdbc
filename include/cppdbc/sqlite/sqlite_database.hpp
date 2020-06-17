@@ -140,7 +140,7 @@ public:
      * @throw std::invalid_argument in case of invalid query.
      * @throw std::logic_error in case of failure to create statement.
      */
-    std::shared_ptr<Statement> createStatement(const std::string& query) override;
+    std::shared_ptr<Statement> create_statement(const std::string& query) override;
 
     /**
      * @brief Create transaction.
@@ -151,7 +151,7 @@ public:
      * @return Pointer to the created transaction.
      * @throw std::logic_error in case of failure to create transaction.
      */
-    std::shared_ptr<Transaction> createTransaction() override;
+    std::shared_ptr<Transaction> create_transaction() override;
 
     /**
      * @brief Check if table exists.
@@ -164,7 +164,7 @@ public:
      * @retval false - if table doesn't exist.
      * @throw std::logic_error in case of failure to check if table exists.
      */
-    bool hasTable(const std::string& tableName) override;
+    bool has_table(const std::string& tableName) override;
 
 private:
     /**
@@ -193,7 +193,7 @@ private:
      *
      * @return SQLite flags.
      */
-    static int32_t parseSQLiteMode(SQLiteMode mode);
+    static int32_t parse_sqlite_mode(SQLiteMode mode);
 
     /**
      * @brief SQLite database handler.

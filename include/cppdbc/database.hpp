@@ -72,7 +72,7 @@ public:
      * @throw std::invalid_argument in case of invalid query.
      * @throw std::logic_error in case of failure to create statement.
      */
-    virtual std::shared_ptr<Statement> createStatement(const std::string& query) = 0;
+    virtual std::shared_ptr<Statement> create_statement(const std::string& query) = 0;
 
     /**
      * @brief Create transaction.
@@ -83,7 +83,7 @@ public:
      * @return Pointer to the created transaction.
      * @throw std::logic_error in case of failure to create transaction.
      */
-    virtual std::shared_ptr<Transaction> createTransaction() = 0;
+    virtual std::shared_ptr<Transaction> create_transaction() = 0;
 
     /**
      * @brief Check if table exists.
@@ -96,7 +96,7 @@ public:
      * @retval false - table doesn't exist.
      * @throw std::logic_error in case of failure to check if table exists.
      */
-    virtual bool hasTable(const std::string& tableName) = 0;
+    virtual bool has_table(const std::string& tableName) = 0;
 };
 
 } // namespace cppdbc

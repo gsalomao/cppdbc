@@ -44,16 +44,16 @@ protected:
     void TearDown() override;
 
     template<typename T>
-    void checkBindInteger(T value, uint16_t index);
+    void check_bind_integer(T value, uint16_t index);
 
     template<typename T>
-    void checkBindInteger64(T value, uint16_t index);
+    void check_bind_integer64(T value, uint16_t index);
 
     template<typename T>
-    void checkBindDouble(T value, uint16_t index);
+    void check_bind_double(T value, uint16_t index);
 
-    sqlite3* fakeSQLite_{nullptr};
-    sqlite3_stmt* fakeStmt_{nullptr};
+    sqlite3* fake_sqlite_{nullptr};
+    sqlite3_stmt* fake_stmt_{nullptr};
 
     std::shared_ptr<SQLite3Mock> mock_;
     std::shared_ptr<SQLiteStatement> statement_;
@@ -62,16 +62,16 @@ protected:
 
 void SQLiteStatementTest::SetUp() {
     mock_ = std::make_shared<NiceMock<SQLite3Mock>>();
-    SQLite3Mock::registerMock(mock_);
+    SQLite3Mock::register_mock(mock_);
 
-    fakeSQLite_ = reinterpret_cast<sqlite3*>(new int(1));
-    fakeStmt_ = reinterpret_cast<sqlite3_stmt*>(new int(1));
+    fake_sqlite_ = reinterpret_cast<sqlite3*>(new int(1));
+    fake_stmt_ = reinterpret_cast<sqlite3_stmt*>(new int(1));
 
     ON_CALL(*mock_, sqlite3_open_v2)
-            .WillByDefault(DoAll(SetArgPointee<1>(fakeSQLite_), Return(SQLITE_OK)));
+            .WillByDefault(DoAll(SetArgPointee<1>(fake_sqlite_), Return(SQLITE_OK)));
 
     ON_CALL(*mock_, sqlite3_prepare_v2)
-            .WillByDefault(DoAll(SetArgPointee<3>(fakeStmt_), Return(SQLITE_OK)));
+            .WillByDefault(DoAll(SetArgPointee<3>(fake_stmt_), Return(SQLITE_OK)));
 
     ON_CALL(*mock_, sqlite3_step)
             .WillByDefault(Return(SQLITE_DONE));
@@ -81,8 +81,8 @@ void SQLiteStatementTest::SetUp() {
 }
 
 void SQLiteStatementTest::TearDown() {
-    delete reinterpret_cast<int*>(fakeStmt_);
-    delete reinterpret_cast<int*>(fakeSQLite_);
+    delete reinterpret_cast<int*>(fake_stmt_);
+    delete reinterpret_cast<int*>(fake_sqlite_);
 
     if (statement_) {
         EXPECT_CALL(*mock_, sqlite3_finalize);
@@ -94,24 +94,24 @@ void SQLiteStatementTest::TearDown() {
 }
 
 template<typename T>
-void SQLiteStatementTest::checkBindInteger(T value, uint16_t index) {
-    EXPECT_CALL(*mock_, sqlite3_bind_int(fakeStmt_, (index + 1), value))
+void SQLiteStatementTest::check_bind_integer(T value, uint16_t index) {
+    EXPECT_CALL(*mock_, sqlite3_bind_int(fake_stmt_, (index + 1), value))
             .WillOnce(Return(SQLITE_OK));
 
     statement_->bind(value, index);
 }
 
 template<typename T>
-void SQLiteStatementTest::checkBindInteger64(T value, uint16_t index) {
-    EXPECT_CALL(*mock_, sqlite3_bind_int64(fakeStmt_, (index + 1), value))
+void SQLiteStatementTest::check_bind_integer64(T value, uint16_t index) {
+    EXPECT_CALL(*mock_, sqlite3_bind_int64(fake_stmt_, (index + 1), value))
             .WillOnce(Return(SQLITE_OK));
 
     statement_->bind(value, index);
 }
 
 template<typename T>
-void SQLiteStatementTest::checkBindDouble(T value, uint16_t index) {
-    EXPECT_CALL(*mock_, sqlite3_bind_double(fakeStmt_, (index + 1), value))
+void SQLiteStatementTest::check_bind_double(T value, uint16_t index) {
+    EXPECT_CALL(*mock_, sqlite3_bind_double(fake_stmt_, (index + 1), value))
             .WillOnce(Return(SQLITE_OK));
 
     statement_->bind(value, index);
@@ -119,7 +119,7 @@ void SQLiteStatementTest::checkBindDouble(T value, uint16_t index) {
 
 TEST_F(SQLiteStatementTest, ConstructorPreparesStatement) {
     EXPECT_CALL(*mock_, sqlite3_prepare_v2(_, StrEq(SQL_QUERY), strlen(SQL_QUERY), _, _))
-            .WillOnce(DoAll(SetArgPointee<3>(fakeStmt_), Return(SQLITE_OK)));
+            .WillOnce(DoAll(SetArgPointee<3>(fake_stmt_), Return(SQLITE_OK)));
 
     auto statement = std::make_shared<SQLiteStatement>(database_, SQL_QUERY);
     EXPECT_NE(statement, nullptr);
@@ -163,12 +163,12 @@ TEST_F(SQLiteStatementTest, MoveStatementToItselfDoNotFinilizeIt) {
 }
 
 TEST_F(SQLiteStatementTest, DestructorCallsSQLite) {
-    EXPECT_CALL(*mock_, sqlite3_finalize(fakeStmt_));
+    EXPECT_CALL(*mock_, sqlite3_finalize(fake_stmt_));
     statement_.reset();
 }
 
 TEST_F(SQLiteStatementTest, ExecuteStatementCallsStep) {
-    EXPECT_CALL(*mock_, sqlite3_step(fakeStmt_));
+    EXPECT_CALL(*mock_, sqlite3_step(fake_stmt_));
     statement_->execute();
 }
 
@@ -229,50 +229,50 @@ TEST_F(SQLiteStatementTest, CheckIfStatementIsPending) {
 }
 
 TEST_F(SQLiteStatementTest, BindUnsignedInteger8) {
-    checkBindInteger<uint8_t>(20, 2);
+    check_bind_integer<uint8_t>(20, 2);
 }
 
 TEST_F(SQLiteStatementTest, BindUnsignedInteger16) {
-    checkBindInteger<uint16_t>(50, 5);
+    check_bind_integer<uint16_t>(50, 5);
 }
 
 TEST_F(SQLiteStatementTest, BindUnsignedInteger32) {
-    checkBindInteger<uint32_t>(30, 3);
+    check_bind_integer<uint32_t>(30, 3);
 }
 
 TEST_F(SQLiteStatementTest, BindUnsignedInteger64) {
-    checkBindInteger64<uint64_t>(0, 0);
+    check_bind_integer64<uint64_t>(0, 0);
 }
 
 TEST_F(SQLiteStatementTest, BindSignedInteger8) {
-    checkBindInteger<int8_t>(-20, 2);
+    check_bind_integer<int8_t>(-20, 2);
 }
 
 TEST_F(SQLiteStatementTest, BindSignedInteger16) {
-    checkBindInteger<int16_t>(-50, 5);
+    check_bind_integer<int16_t>(-50, 5);
 }
 
 TEST_F(SQLiteStatementTest, BindSignedInteger32) {
-    checkBindInteger<int32_t>(-30, 3);
+    check_bind_integer<int32_t>(-30, 3);
 }
 
 TEST_F(SQLiteStatementTest, BindSignedInteger64) {
-    checkBindInteger64<int64_t>(-2, 0);
+    check_bind_integer64<int64_t>(-2, 0);
 }
 
 TEST_F(SQLiteStatementTest, BindFloat) {
-    checkBindDouble<float>(1.2, 6);
+    check_bind_double<float>(1.2, 6);
 }
 
 TEST_F(SQLiteStatementTest, BindDouble) {
-    checkBindDouble<double>(0.59, 1);
+    check_bind_double<double>(0.59, 1);
 }
 
 TEST_F(SQLiteStatementTest, BindText) {
     uint16_t index = 2;
     const char* value = "Test";
 
-    EXPECT_CALL(*mock_, sqlite3_bind_text(fakeStmt_, (index + 1), StrEq(value),
+    EXPECT_CALL(*mock_, sqlite3_bind_text(fake_stmt_, (index + 1), StrEq(value),
             strlen(value), nullptr))
             .WillOnce(Return(SQLITE_OK));
 
@@ -283,7 +283,7 @@ TEST_F(SQLiteStatementTest, BindBlob) {
     uint16_t index = 2;
     const char* value = "Test";
 
-    EXPECT_CALL(*mock_, sqlite3_bind_blob(fakeStmt_, (index + 1), value,
+    EXPECT_CALL(*mock_, sqlite3_bind_blob(fake_stmt_, (index + 1), value,
             strlen(value), nullptr))
             .WillOnce(Return(SQLITE_OK));
 

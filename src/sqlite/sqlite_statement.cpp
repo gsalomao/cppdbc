@@ -39,7 +39,7 @@ SQLiteStatement::SQLiteStatement(const std::shared_ptr<SQLiteDatabase>& database
     int result = sqlite3_prepare_v2(database_->sqlite_, query.c_str(),
             static_cast<int>(query.size()), &statement_, nullptr);
 
-    checkSQLiteResult(result, "Failed to create statement");
+    check_sqlite_result(result, "Failed to create statement");
 }
 
 SQLiteStatement::SQLiteStatement(SQLiteStatement&& other) noexcept:
@@ -106,70 +106,70 @@ std::shared_ptr<ResultSet> SQLiteStatement::execute() {
 
 void SQLiteStatement::bind(uint8_t value, uint16_t index) {
     int result = sqlite3_bind_int(statement_, index + 1, value);
-    checkSQLiteResult(result, "Failed to bind uint8");
+    check_sqlite_result(result, "Failed to bind uint8");
 }
 
 void SQLiteStatement::bind(uint16_t value, uint16_t index) {
     int result = sqlite3_bind_int(statement_, index + 1, value);
-    checkSQLiteResult(result, "Failed to bind uint16");
+    check_sqlite_result(result, "Failed to bind uint16");
 }
 
 void SQLiteStatement::bind(uint32_t value, uint16_t index) {
     int result = sqlite3_bind_int(statement_, index + 1, value);
-    checkSQLiteResult(result, "Failed to bind uint32");
+    check_sqlite_result(result, "Failed to bind uint32");
 }
 
 void SQLiteStatement::bind(uint64_t value, uint16_t index) {
     int result = sqlite3_bind_int64(statement_, index + 1,
             static_cast<sqlite3_int64>(value));
-    checkSQLiteResult(result, "Failed to bind uint64");
+    check_sqlite_result(result, "Failed to bind uint64");
 }
 
 void SQLiteStatement::bind(int8_t value, uint16_t index) {
     int result = sqlite3_bind_int(statement_, index + 1, value);
-    checkSQLiteResult(result, "Failed to bind int8");
+    check_sqlite_result(result, "Failed to bind int8");
 }
 
 void SQLiteStatement::bind(int16_t value, uint16_t index) {
     int result = sqlite3_bind_int(statement_, index + 1, value);
-    checkSQLiteResult(result, "Failed to bind int16");
+    check_sqlite_result(result, "Failed to bind int16");
 }
 
 void SQLiteStatement::bind(int32_t value, uint16_t index) {
     int result = sqlite3_bind_int(statement_, index + 1, value);
-    checkSQLiteResult(result, "Failed to bind int32");
+    check_sqlite_result(result, "Failed to bind int32");
 }
 
 void SQLiteStatement::bind(int64_t value, uint16_t index) {
     int result = sqlite3_bind_int64(statement_, index + 1, value);
-    checkSQLiteResult(result, "Failed to bind int64");
+    check_sqlite_result(result, "Failed to bind int64");
 }
 
 void SQLiteStatement::bind(std::string value, uint16_t index) {
     int result = sqlite3_bind_text(statement_, index + 1, value.c_str(),
             static_cast<int>(value.size()), nullptr);
 
-    checkSQLiteResult(result, "Failed to bind string");
+    check_sqlite_result(result, "Failed to bind string");
 }
 
 void SQLiteStatement::bind(float value, uint16_t index) {
     int result = sqlite3_bind_double(statement_, index + 1, value);
-    checkSQLiteResult(result, "Failed to bind float");
+    check_sqlite_result(result, "Failed to bind float");
 }
 
 void SQLiteStatement::bind(double value, uint16_t index) {
     int result = sqlite3_bind_double(statement_, index + 1, value);
-    checkSQLiteResult(result, "Failed to bind double");
+    check_sqlite_result(result, "Failed to bind double");
 }
 
 void SQLiteStatement::bind(const void* value, size_t size, uint16_t index) {
     int result = sqlite3_bind_blob(statement_, index + 1, value,
             static_cast<int>(size), nullptr);
 
-    checkSQLiteResult(result, "Failed to bind blob");
+    check_sqlite_result(result, "Failed to bind blob");
 }
 
-void SQLiteStatement::checkSQLiteResult(int result, const std::string& message) {
+void SQLiteStatement::check_sqlite_result(int result, const std::string& message) {
     if (result != SQLITE_OK) {
         throw std::invalid_argument(message);
     }

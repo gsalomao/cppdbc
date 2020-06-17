@@ -78,7 +78,7 @@ public:
     * @throw std::invalid_argument in case of invalid column.
     * @throw std::logic_error in case of failure to get the data type.
     */
-    DataType dataType(column_t column) const override;
+    DataType data_type(column_t column) const override;
 
     /**
      * @brief Get unsigned integer (8-bits).
@@ -259,7 +259,7 @@ private:
      * @throw std::invalid_argument in case of the column doesn't have the
      * expected data type.
      */
-    void expectDataType(column_t column, DataType type) const;
+    void check_data_type(column_t column, DataType type) const;
 
     /**
      * @brief Indicates if the result set is pending.

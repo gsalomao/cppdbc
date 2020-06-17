@@ -29,11 +29,11 @@ namespace cppdbc {
 
 static std::shared_ptr<SQLite3Mock> mock_;
 
-void SQLite3Mock::registerMock(const std::shared_ptr<SQLite3Mock>& mock) {
+void SQLite3Mock::register_mock(const std::shared_ptr<SQLite3Mock>& mock) {
     mock_ = mock;
 }
 
-SQLite3Mock& SQLite3Mock::getInstance() {
+SQLite3Mock& SQLite3Mock::instance() {
     if (!mock_) {
         throw std::runtime_error("SQLite3Mock not registered");
     }
@@ -50,95 +50,95 @@ void SQLite3Mock::destroy() {
 using cppdbc::SQLite3Mock;
 
 int sqlite3_open_v2(const char* filename, sqlite3** db, int flags, const char* zVfs) {
-    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    SQLite3Mock& mock = SQLite3Mock::instance();
     return mock.sqlite3_open_v2(filename, db, flags, zVfs);
 }
 
 int sqlite3_close(sqlite3* db) {
-    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    SQLite3Mock& mock = SQLite3Mock::instance();
     return mock.sqlite3_close(db);
 }
 
 int sqlite3_prepare_v2(sqlite3* db, const char* sql, int byte, sqlite3_stmt** stmt,
         const char** tail) {
-    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    SQLite3Mock& mock = SQLite3Mock::instance();
     return mock.sqlite3_prepare_v2(db, sql, byte, stmt, tail);
 }
 
 int sqlite3_finalize(sqlite3_stmt* stmt) {
-    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    SQLite3Mock& mock = SQLite3Mock::instance();
     return mock.sqlite3_finalize(stmt);
 }
 
 int sqlite3_exec(sqlite3* db, const char* sql,
         int (* callback)(void*, int, char**, char**), void* arg, char** errmsg) {
-    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    SQLite3Mock& mock = SQLite3Mock::instance();
     return mock.sqlite3_exec(db, sql, callback, arg, errmsg);
 }
 
 int sqlite3_step(sqlite3_stmt* stmt) {
-    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    SQLite3Mock& mock = SQLite3Mock::instance();
     return mock.sqlite3_step(stmt);
 }
 
 int sqlite3_bind_int(sqlite3_stmt* stmt, int col, int value) {
-    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    SQLite3Mock& mock = SQLite3Mock::instance();
     return mock.sqlite3_bind_int(stmt, col, value);
 }
 
 int sqlite3_bind_int64(sqlite3_stmt* stmt, int col, sqlite3_int64 value) {
-    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    SQLite3Mock& mock = SQLite3Mock::instance();
     return mock.sqlite3_bind_int64(stmt, col, value);
 }
 
 int sqlite3_bind_double(sqlite3_stmt* stmt, int col, double value) {
-    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    SQLite3Mock& mock = SQLite3Mock::instance();
     return mock.sqlite3_bind_double(stmt, col, value);
 }
 
 int sqlite3_bind_text(sqlite3_stmt* stmt, int col, const char* str, int len,
         void (* ptr)(void*)) {
-    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    SQLite3Mock& mock = SQLite3Mock::instance();
     return mock.sqlite3_bind_text(stmt, col, str, len, ptr);
 }
 
 int sqlite3_bind_blob(sqlite3_stmt* stmt, int col, const void* blob, int len,
         void (* ptr)(void*)) {
-    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    SQLite3Mock& mock = SQLite3Mock::instance();
     return mock.sqlite3_bind_blob(stmt, col, blob, len, ptr);
 }
 
 int sqlite3_column_type(sqlite3_stmt* stmt, int col) {
-    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    SQLite3Mock& mock = SQLite3Mock::instance();
     return mock.sqlite3_column_type(stmt, col);
 }
 
 int sqlite3_column_int(sqlite3_stmt* stmt, int col) {
-    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    SQLite3Mock& mock = SQLite3Mock::instance();
     return mock.sqlite3_column_int(stmt, col);
 }
 
 sqlite3_int64 sqlite3_column_int64(sqlite3_stmt* stmt, int col) {
-    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    SQLite3Mock& mock = SQLite3Mock::instance();
     return mock.sqlite3_column_int64(stmt, col);
 }
 
 double sqlite3_column_double(sqlite3_stmt* stmt, int col) {
-    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    SQLite3Mock& mock = SQLite3Mock::instance();
     return mock.sqlite3_column_double(stmt, col);
 }
 
 const unsigned char* sqlite3_column_text(sqlite3_stmt* stmt, int col) {
-    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    SQLite3Mock& mock = SQLite3Mock::instance();
     return mock.sqlite3_column_text(stmt, col);
 }
 
 const void* sqlite3_column_blob(sqlite3_stmt* stmt, int col) {
-    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    SQLite3Mock& mock = SQLite3Mock::instance();
     return mock.sqlite3_column_blob(stmt, col);
 }
 
 int sqlite3_column_bytes(sqlite3_stmt* stmt, int col) {
-    SQLite3Mock& mock = SQLite3Mock::getInstance();
+    SQLite3Mock& mock = SQLite3Mock::instance();
     return mock.sqlite3_column_bytes(stmt, col);
 }

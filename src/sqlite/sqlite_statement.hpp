@@ -296,7 +296,7 @@ private:
      * @throw std::invalid_argument in case of the result value is not
      * SQLITE_OK.
      */
-    static void checkSQLiteResult(int result, const std::string& message);
+    static void check_sqlite_result(int result, const std::string& message);
 
     /**
      * @brief Indicates if the statement has not completed.

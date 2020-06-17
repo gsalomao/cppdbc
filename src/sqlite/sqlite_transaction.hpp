@@ -101,7 +101,7 @@ public:
      * @retvar true - transaction is pending.
      * @retval false - transaction is not pending.
      */
-    bool isPending() override;
+    bool pending() override;
 
     /**
      * @brief Commit SQLite transaction.
@@ -131,7 +131,7 @@ private:
      *
      * @return SQLite result.
      */
-    int executeStatement(const std::string& stmt);
+    int execute_statement(const std::string& stmt);
 
     /**
      * @brief Indicates if the transaction is pending.

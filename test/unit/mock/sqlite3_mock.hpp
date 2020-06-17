@@ -52,7 +52,7 @@ public:
      *
      * @param mock Pointer to the SQLite mock to be register.
      */
-    static void registerMock(const std::shared_ptr<SQLite3Mock>& mock);
+    static void register_mock(const std::shared_ptr<SQLite3Mock>& mock);
 
     /**
      * @brief Get SQLite mock.
@@ -61,7 +61,7 @@ public:
      *
      * @return Reference to the registered SQLite mock.
      */
-    static SQLite3Mock& getInstance();
+    static SQLite3Mock& instance();
 
     /**
      * @brief Destroy SQLite mock.

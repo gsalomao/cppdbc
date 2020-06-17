@@ -88,7 +88,7 @@ public:
      * @throw std::invalid_argument in case of invalid column.
      * @throw std::logic_error in case of failure to get the data type.
      */
-    virtual DataType dataType(column_t column) const = 0;
+    virtual DataType data_type(column_t column) const = 0;
 
     /**
      * @brief Get unsigned integer (8-bits).
