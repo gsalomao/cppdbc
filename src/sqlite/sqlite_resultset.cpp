@@ -109,6 +109,11 @@ int64_t SQLiteResultSet::int64(column_t column) const {
     return sqlite3_column_int64(statement_->statement_, column);
 }
 
+bool SQLiteResultSet::boolean(column_t column) const {
+    check_data_type(column, DataType::INTEGER);
+    return static_cast<bool>(sqlite3_column_int(statement_->statement_, column));
+}
+
 float SQLiteResultSet::flt(column_t column) const {
     check_data_type(column, DataType::FLOAT);
     return static_cast<float>(sqlite3_column_double(statement_->statement_, column));

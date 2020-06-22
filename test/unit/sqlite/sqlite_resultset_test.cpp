@@ -192,6 +192,13 @@ TEST_F(SQLiteResultSetTest, GetSignedInteger64) {
     EXPECT_EQ(result_set_->int64(2), -10);
 }
 
+TEST_F(SQLiteResultSetTest, GetBool) {
+    EXPECT_CALL(*mock_, sqlite3_column_int(fake_stmt_, 1))
+            .WillOnce(Return(true));
+
+    EXPECT_EQ(result_set_->boolean(1), true);
+}
+
 TEST_F(SQLiteResultSetTest, GetFloat) {
     ON_CALL(*mock_, sqlite3_column_type)
             .WillByDefault(Return(SQLITE_FLOAT));
@@ -225,7 +232,7 @@ TEST_F(SQLiteResultSetTest, GetText) {
 }
 
 MATCHER_P2(MemEq, bytes, size, std::string(negation ? "isn't" : "is") +
-                               " memory equals") {
+        " memory equals") {
     return !memcmp(reinterpret_cast<const char*>(arg), bytes, size);
 }
 

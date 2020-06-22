@@ -193,6 +193,19 @@ public:
     int64_t int64(column_t column) const override;
 
     /**
+     * @brief Get boolean.
+     *
+     * Get boolean value from a given column of the result set.
+     *
+     * @param[in] column Column to get value.
+     *
+     * @return Value of the column.
+     * @throw std::invalid_argument in case of invalid column.
+     * @throw std::logic_error in case of failure to get value.
+     */
+    bool boolean(column_t column) const override;
+
+    /**
      * @brief Get float.
      *
      * Get float value from a given column of the result set.
