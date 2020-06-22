@@ -101,7 +101,7 @@ public:
      * @retvar true - transaction is pending.
      * @retval false - transaction is not pending.
      */
-    bool pending() override;
+    [[nodiscard]] bool pending() const noexcept override;
 
     /**
      * @brief Commit SQLite transaction.

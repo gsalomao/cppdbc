@@ -103,7 +103,7 @@ public:
      * @retval true - statement pending.
      * @retval false - statement is not pending.
      */
-    bool pending() override;
+    [[nodiscard]] bool pending() const noexcept override;
 
     /**
      * @brief Execute SQLite statement.

@@ -127,7 +127,7 @@ public:
      * @retval true - database connection is valid.
      * @retval false - database connection is invalid.
      */
-    bool valid() const noexcept override;
+    [[nodiscard]] bool valid() const noexcept override;
 
     /**
      * @brief Create statement.

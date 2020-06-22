@@ -57,7 +57,7 @@ public:
      * @retval true - statement pending.
      * @retval false - statement is not pending.
      */
-    virtual bool pending() = 0;
+    [[nodiscard]] virtual bool pending() const noexcept = 0;
 
     /**
      * @brief Execute statement.

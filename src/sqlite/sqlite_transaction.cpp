@@ -63,7 +63,7 @@ SQLiteTransaction& SQLiteTransaction::operator=(SQLiteTransaction&& other) noexc
     return *this;
 }
 
-bool SQLiteTransaction::pending() {
+bool SQLiteTransaction::pending() const noexcept {
     return pending_;
 }
 

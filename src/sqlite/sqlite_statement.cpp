@@ -76,7 +76,7 @@ SQLiteStatement& SQLiteStatement::operator=(cppdbc::SQLiteStatement&& other) noe
     return *this;
 }
 
-bool SQLiteStatement::pending() {
+bool SQLiteStatement::pending() const noexcept {
     return pending_;
 }
 

@@ -59,7 +59,7 @@ public:
      * @retval true - database connection is valid.
      * @retval false - database connection is invalid.
      */
-    virtual bool valid() const noexcept = 0;
+    [[nodiscard]] virtual bool valid() const noexcept = 0;
 
     /**
      * @brief Create statement.
