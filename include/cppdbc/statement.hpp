@@ -176,6 +176,19 @@ public:
     virtual void bind(int64_t value, uint16_t index) = 0;
 
     /**
+     * @brief Bind boolean.
+     *
+     * Bind boolean value to a given index of the statement.
+     *
+     * @param[in] value Value to be bound.
+     * @param[in] index Index which the value shall be bound.
+     *
+     * @throw std::invalid_argument in case of failure to bind the value to
+     * column.
+     */
+    virtual void bind(bool value, uint16_t index) = 0;
+
+    /**
      * @brief Bind string.
      *
      * Bind string value to a given index of the statement.

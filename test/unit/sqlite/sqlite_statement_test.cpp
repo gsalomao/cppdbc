@@ -268,6 +268,10 @@ TEST_F(SQLiteStatementTest, BindDouble) {
     check_bind_double<double>(0.59, 1);
 }
 
+TEST_F(SQLiteStatementTest, BindBool) {
+    check_bind_integer<bool>(true, 1);
+}
+
 TEST_F(SQLiteStatementTest, BindText) {
     uint16_t index = 2;
     const char* value = "Test";
@@ -276,7 +280,7 @@ TEST_F(SQLiteStatementTest, BindText) {
             strlen(value), nullptr))
             .WillOnce(Return(SQLITE_OK));
 
-    statement_->bind(value, index);
+    statement_->bind(std::string(value), index);
 }
 
 TEST_F(SQLiteStatementTest, BindBlob) {

@@ -145,6 +145,11 @@ void SQLiteStatement::bind(int64_t value, uint16_t index) {
     check_sqlite_result(result, "Failed to bind int64");
 }
 
+void SQLiteStatement::bind(bool value, uint16_t index) {
+    int result = sqlite3_bind_int(statement_, index + 1, value);
+    check_sqlite_result(result, "Failed to bind bool");
+}
+
 void SQLiteStatement::bind(std::string value, uint16_t index) {
     int result = sqlite3_bind_text(statement_, index + 1, value.c_str(),
             static_cast<int>(value.size()), nullptr);
