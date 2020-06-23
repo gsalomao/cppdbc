@@ -98,7 +98,7 @@ std::shared_ptr<ResultSet> SQLiteStatement::execute() {
         case SQLITE_DONE:
             return nullptr;
         case SQLITE_CONSTRAINT:
-            throw std::logic_error("Constraint violation");
+            throw constraint_violation();
         default:
             throw std::logic_error("Failed to execute SQLite statement");
     }

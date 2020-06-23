@@ -192,7 +192,7 @@ TEST_F(SQLiteStatementTest, ExecuteStatementWhichViolatesConstraintThrowsExcepti
     ON_CALL(*mock_, sqlite3_step)
             .WillByDefault(Return(SQLITE_CONSTRAINT));
 
-    EXPECT_THROW(statement_->execute(), std::logic_error);
+    EXPECT_THROW(statement_->execute(), constraint_violation);
 }
 
 TEST_F(SQLiteStatementTest, ExecuteStatementThrowsExceptionWhenFailure) {

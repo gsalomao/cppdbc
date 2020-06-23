@@ -30,6 +30,7 @@
 
 #include <memory>
 
+#include "exception.hpp"
 #include "resultset.hpp"
 #include "statement.hpp"
 #include "transaction.hpp"

@@ -67,6 +67,8 @@ public:
      *
      * @retval Pointer to the result set.
      * @retval nullptr when there's no result set.
+     * @throw cppdbc::constraint_violation in case of the statement violates
+     * any constraint.
      * @throw std::logic_error in case of failure to execute the statement.
      */
     virtual std::shared_ptr<ResultSet> execute() = 0;
