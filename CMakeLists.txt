@@ -80,8 +80,10 @@ message(STATUS "Build type set to ${CMAKE_BUILD_TYPE}")
 # Tests
 # =============================================================================
 
-enable_testing()
-add_subdirectory(test)
+if (ENABLE_TESTS)
+  enable_testing()
+  add_subdirectory(test)
+endif ()
 
 # =============================================================================
 # Static Analysis

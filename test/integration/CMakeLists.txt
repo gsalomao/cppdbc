@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-add_executable(${PROJECT_NAME}_integration EXCLUDE_FROM_ALL)
+add_executable(${PROJECT_NAME}_integration)
 
 set(INTEGRATION_TEST_REPORT_FILE "integration-test-report.xml" CACHE STRING
   "File name of the integration test report")

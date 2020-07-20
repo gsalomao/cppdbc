@@ -18,7 +18,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-add_executable(${PROJECT_NAME}_unit EXCLUDE_FROM_ALL)
+add_executable(${PROJECT_NAME}_unit)
 
 set(UNIT_TEST_REPORT_FILE "unit-test-report.xml" CACHE STRING
   "File name of the unit test report")

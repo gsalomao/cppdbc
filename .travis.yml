@@ -41,10 +41,9 @@ install:
   - cd ${TRAVIS_BUILD_DIR}
 
 script:
-  - cmake -Bbuild -DENABLE_COVERAGE=YES .
+  - cmake -Bbuild -DENABLE_TESTS=YES -DENABLE_COVERAGE=YES .
   - cmake --build build/ --target static
   - cmake --build build/ --target all
-  - cmake --build build/ --target build_tests
   - cmake --build build/ --target test_unit
   - cmake --build build/ --target coverage
   - cmake --build build/ --target test_integration

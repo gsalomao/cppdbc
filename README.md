@@ -41,7 +41,13 @@ The project is shipped with two groups of tests: unit and integration tests.
 - Google Test
 - Google Mock
 
-To run the unit and integration tests, the tests must be built.
+To run the unit and integration tests, the tests must be enabled during the configuration.
+of the project.
+```bash
+cmake -B build -D ENABLE_TESTS=YES .
+```
+
+Once the tests have been enabled, the tests can be built.
 ```bash
 cmake --build build --target build_tests
 ```
