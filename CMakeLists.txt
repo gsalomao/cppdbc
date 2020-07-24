@@ -47,6 +47,11 @@ option(ENABLE_COVERAGE "Enable test coverage" NO)
 if (ENABLE_COVERAGE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
   set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
+  set(ENABLE_TESTS YES)
+endif ()
+
+if (ENABLE_TESTS)
+  set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
 endif ()
 
 if (NOT CMAKE_BUILD_TYPE)
@@ -80,6 +85,8 @@ message(STATUS "Build type set to ${CMAKE_BUILD_TYPE}")
 # Tests
 # =============================================================================
 
+option(ENABLE_TESTS "Enable tests" NO)
+
 if (ENABLE_TESTS)
   enable_testing()
   add_subdirectory(test)
@@ -108,15 +115,35 @@ else ()
 endif ()
 
 # =============================================================================
-# Documentation
-# =============================================================================
-
-add_subdirectory(docs)
-
-# =============================================================================
 # Installation
 # =============================================================================
 
 include(GNUInstallDirs)
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 message(STATUS "Installation into ${CMAKE_INSTALL_PREFIX}")
+
+# =============================================================================
+# Documentation
+# =============================================================================
+
+option(BUILD_DOC "Build documentation" NO)
+add_subdirectory(doc)
+
+# =============================================================================
+# Build Info
+# =============================================================================
+
+message(STATUS)
+message(STATUS "-------------------------------------------------------------")
+message(STATUS "                      Build Info")
+message(STATUS "-------------------------------------------------------------")
+message(STATUS "Project:      ${PROJECT_NAME}")
+message(STATUS "Version:      ${PROJECT_VERSION}")
+message(STATUS "Build:        ${CMAKE_BUILD_TYPE}")
+message(STATUS "Install:      ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "Shared libs:  ${BUILD_SHARED_LIBS}")
+message(STATUS "Tests:        ${ENABLE_TESTS}")
+message(STATUS "Coverage:     ${ENABLE_COVERAGE}")
+message(STATUS "Doc:          ${BUILD_DOC}")
+message(STATUS "-------------------------------------------------------------")
+message(STATUS)

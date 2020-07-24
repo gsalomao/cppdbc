@@ -101,6 +101,17 @@ cmake --build build --target static
 ## Documentation
 The project has all classes and functions documented to help the users to understand them.
 
+To build the documentation, the documentation has to be enabled during the configuration
+of project.
+```bash
+cmake -B build -D BUILD_DOC=YES .
+```
+
+Once the documentation is enabled, it can be built.
+```bash
+cmake --build build --target doc
+```
+
 ### Dependencies
 
 - Doxygen
