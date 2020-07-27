@@ -19,64 +19,69 @@
 # SOFTWARE.
 
 # =============================================================================
-# Library
-# =============================================================================
-
-set(DATABASE sqlite)
-set(LIBRARY_NAME ${PROJECT_NAME}-${DATABASE})
-
-add_library(${LIBRARY_NAME})
-add_library(${PROJECT_NAME}::${DATABASE} ALIAS ${LIBRARY_NAME})
-
-set_target_properties(${LIBRARY_NAME} PROPERTIES
-  VERSION ${PROJECT_VERSION}
-  EXPORT_NAME ${PROJECT_NAME}::${DATABASE})
-
-target_sources(${LIBRARY_NAME} PRIVATE
-  sqlite_database.cpp
-  sqlite_resultset.cpp
-  sqlite_statement.cpp
-  sqlite_transaction.cpp)
-
-target_include_directories(${LIBRARY_NAME} PUBLIC
-  $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>)
-
-# =============================================================================
 # Dependencies
 # =============================================================================
 
-find_package(SQLite3 REQUIRED)
-target_link_libraries(${LIBRARY_NAME} PRIVATE SQLite::SQLite3)
+find_package(SQLite3)
+
+# =============================================================================
+# Library
+# =============================================================================
+
+if (SQLite3_FOUND)
+  set(DATABASE sqlite)
+  set(LIBRARY_NAME ${PROJECT_NAME}-${DATABASE})
+
+  add_library(${LIBRARY_NAME})
+  add_library(${PROJECT_NAME}::${DATABASE} ALIAS ${LIBRARY_NAME})
+
+  set_target_properties(${LIBRARY_NAME} PROPERTIES
+    VERSION ${PROJECT_VERSION}
+    EXPORT_NAME ${PROJECT_NAME}::${DATABASE})
+
+  target_sources(${LIBRARY_NAME} PRIVATE
+    sqlite_database.cpp
+    sqlite_resultset.cpp
+    sqlite_statement.cpp
+    sqlite_transaction.cpp)
+
+  target_include_directories(${LIBRARY_NAME} PUBLIC
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>)
+
+  target_link_libraries(${LIBRARY_NAME} PRIVATE SQLite::SQLite3)
+endif ()
 
 # =============================================================================
 # Installation
 # =============================================================================
 
-include(GNUInstallDirs)
-install(TARGETS ${LIBRARY_NAME}
-  DESTINATION ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}
-  EXPORT ${LIBRARY_NAME}-targets)
+if (SQLite3_FOUND)
+  include(GNUInstallDirs)
+  install(TARGETS ${LIBRARY_NAME}
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    EXPORT ${LIBRARY_NAME}-targets)
 
-install(EXPORT ${LIBRARY_NAME}-targets
-  DESTINATION ${CMAKE_INSTALL_DATADIR}/cmake/${PROJECT_NAME})
+  install(EXPORT ${LIBRARY_NAME}-targets
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake)
 
-export(TARGETS ${LIBRARY_NAME}
-  FILE ${CMAKE_BINARY_DIR}/${LIBRARY_NAME}-exports.cmake)
+  export(TARGETS ${LIBRARY_NAME}
+    FILE ${CMAKE_BINARY_DIR}/${LIBRARY_NAME}-exports.cmake)
 
-include(CMakePackageConfigHelpers)
-write_basic_package_version_file(
-  ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}-config-version.cmake
-  VERSION ${PROJECT_VERSION}
-  COMPATIBILITY AnyNewerVersion)
-
-configure_package_config_file(
-  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${LIBRARY_NAME}-config.cmake.in
-  ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}-config.cmake
-  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}/cmake)
-
-install(
-  FILES
-    ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}-config.cmake
+  include(CMakePackageConfigHelpers)
+  write_basic_package_version_file(
     ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}-config-version.cmake
-  DESTINATION ${CMAKE_INSTALL_DATADIR}/cmake/${PROJECT_NAME})
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY AnyNewerVersion)
+
+  configure_package_config_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${LIBRARY_NAME}-config.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}-config.cmake
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake)
+
+  install(
+    FILES
+      ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}-config.cmake
+      ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}-config-version.cmake
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake)
+endif ()

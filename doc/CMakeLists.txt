@@ -18,24 +18,22 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-if (BUILD_DOC)
-  find_package(Doxygen COMPONENTS dot)
+find_package(Doxygen COMPONENTS dot)
 
-  if(Doxygen_FOUND)
-    message(STATUS "Adding documentation")
-    set(DOXYGEN_PROJECT_BRIEF "Database Connector for C++")
-    set(DOXYGEN_FULL_PATH_NAMES NO)
-    set(DOXYGEN_COLLABORATION_GRAPH NO)
-    set(DOXYGEN_USE_MDFILE_AS_MAINPAGE ${PROJECT_SOURCE_DIR}/README.md)
+if(Doxygen_FOUND)
+  message(STATUS "Adding documentation")
+  set(DOXYGEN_PROJECT_BRIEF "Database Connector for C++")
+  set(DOXYGEN_FULL_PATH_NAMES NO)
+  set(DOXYGEN_COLLABORATION_GRAPH NO)
+  set(DOXYGEN_USE_MDFILE_AS_MAINPAGE ${PROJECT_SOURCE_DIR}/README.md)
 
-    doxygen_add_docs(doc
-      ${PROJECT_SOURCE_DIR}/README.md
-      ${PROJECT_SOURCE_DIR}/include
-      ${PROJECT_SOURCE_DIR}/src
-      ALL
-      COMMENT "Generating documentation with Doxygen")
+  doxygen_add_docs(doc
+    ${PROJECT_SOURCE_DIR}/README.md
+    ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/src
+    ALL
+    COMMENT "Generating documentation with Doxygen")
 
-      install(DIRECTORY ${PROJECT_BINARY_DIR}/doc/html 
-        DESTINATION ${CMAKE_INSTALL_DOCDIR})
-  endif()
-endif()
+    install(DIRECTORY ${PROJECT_BINARY_DIR}/doc/html
+      DESTINATION ${CMAKE_INSTALL_DOCDIR})
+endif ()
