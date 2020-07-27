@@ -37,6 +37,7 @@ if (SQLite3_FOUND)
 
   set_target_properties(${LIBRARY_NAME} PROPERTIES
     VERSION ${PROJECT_VERSION}
+    SOVERSION ${PROJECT_VERSION_MAJOR}
     EXPORT_NAME ${PROJECT_NAME}::${DATABASE})
 
   target_sources(${LIBRARY_NAME} PRIVATE
@@ -63,7 +64,7 @@ if (SQLite3_FOUND)
     EXPORT ${LIBRARY_NAME}-targets)
 
   install(EXPORT ${LIBRARY_NAME}-targets
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake)
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
   export(TARGETS ${LIBRARY_NAME}
     FILE ${CMAKE_BINARY_DIR}/${LIBRARY_NAME}-exports.cmake)
@@ -77,11 +78,11 @@ if (SQLite3_FOUND)
   configure_package_config_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${LIBRARY_NAME}-config.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}-config.cmake
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake)
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 
   install(
     FILES
       ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}-config.cmake
       ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}-config-version.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake)
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
 endif ()
