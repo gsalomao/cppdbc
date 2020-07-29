@@ -19,16 +19,10 @@
 # SOFTWARE.
 
 # =============================================================================
-# Dependencies
-# =============================================================================
-
-find_package(SQLite3)
-
-# =============================================================================
 # Library
 # =============================================================================
 
-if (SQLite3_FOUND)
+if (BUILD_FOR_SQLITE)
   set(DATABASE sqlite)
   set(LIBRARY_NAME ${PROJECT_NAME}-${DATABASE})
 
@@ -50,6 +44,7 @@ if (SQLite3_FOUND)
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>)
 
+  find_package(SQLite3 REQUIRED)
   target_link_libraries(${LIBRARY_NAME} PRIVATE SQLite::SQLite3)
 endif ()
 
@@ -57,14 +52,14 @@ endif ()
 # Installation
 # =============================================================================
 
-if (SQLite3_FOUND)
+if (BUILD_FOR_SQLITE)
   include(GNUInstallDirs)
   install(TARGETS ${LIBRARY_NAME}
     DESTINATION ${CMAKE_INSTALL_LIBDIR}
     EXPORT ${LIBRARY_NAME}-targets)
 
   install(EXPORT ${LIBRARY_NAME}-targets
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LIBRARY_NAME})
 
   export(TARGETS ${LIBRARY_NAME}
     FILE ${CMAKE_BINARY_DIR}/${LIBRARY_NAME}-exports.cmake)
@@ -78,11 +73,11 @@ if (SQLite3_FOUND)
   configure_package_config_file(
     ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${LIBRARY_NAME}-config.cmake.in
     ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}-config.cmake
-    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LIBRARY_NAME})
 
   install(
     FILES
       ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}-config.cmake
       ${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}-config-version.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME})
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${LIBRARY_NAME})
 endif ()

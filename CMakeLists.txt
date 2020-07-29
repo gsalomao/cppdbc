@@ -40,6 +40,7 @@ endif ()
 # Flags
 # =============================================================================
 
+option(BUILD_FOR_SQLITE "Build library for SQLite database" YES)
 option(BUILD_SHARED_LIBS "Build shared library" NO)
 option(ENABLE_COVERAGE "Enable test coverage" NO)
 
@@ -143,6 +144,7 @@ message(STATUS "Project:      ${PROJECT_NAME}")
 message(STATUS "Version:      ${PROJECT_VERSION}")
 message(STATUS "Build:        ${CMAKE_BUILD_TYPE}")
 message(STATUS "Install:      ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "SQLite:       ${BUILD_FOR_SQLITE}")
 message(STATUS "Shared libs:  ${BUILD_SHARED_LIBS}")
 message(STATUS "Tests:        ${ENABLE_TESTS}")
 message(STATUS "Coverage:     ${ENABLE_COVERAGE}")
