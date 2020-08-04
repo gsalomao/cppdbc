@@ -20,7 +20,7 @@
 
 find_package(Doxygen COMPONENTS dot)
 
-if(Doxygen_FOUND)
+if (Doxygen_FOUND)
   message(STATUS "Adding documentation")
   set(DOXYGEN_PROJECT_BRIEF "Database Connector for C++")
   set(DOXYGEN_FULL_PATH_NAMES NO)
@@ -31,7 +31,6 @@ if(Doxygen_FOUND)
     ${PROJECT_SOURCE_DIR}/README.md
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/src
-    ALL
     COMMENT "Generating documentation with Doxygen")
 
     install(DIRECTORY ${PROJECT_BINARY_DIR}/doc/html

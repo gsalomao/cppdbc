@@ -29,7 +29,6 @@ find_program(CTEST ctest REQUIRED)
 
 add_custom_target(test_integration)
 add_custom_command(TARGET test_integration COMMAND ${CTEST} -V -R integration-tests)
-add_dependencies(build_tests ${PROJECT_NAME}_integration)
 
 add_test(NAME integration-tests
   COMMAND $<TARGET_FILE:${PROJECT_NAME}_integration> --gtest_color=yes

@@ -25,8 +25,6 @@ set(TEST_REPORT_PATH "${CMAKE_BINARY_DIR}/test-results" CACHE STRING
 
 message(STATUS "Test report path: ${TEST_REPORT_PATH}")
 
-add_custom_target(build_tests)
-
 if (ENABLE_COVERAGE)
   message(STATUS "Adding test coverage")
   find_program(LCOV lcov REQUIRED)

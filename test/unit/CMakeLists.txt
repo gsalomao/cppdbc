@@ -29,7 +29,6 @@ find_program(CTEST ctest REQUIRED)
 
 add_custom_target(test_unit)
 add_custom_command(TARGET test_unit COMMAND ${CTEST} -V -R unit-tests)
-add_dependencies(build_tests ${PROJECT_NAME}_unit)
 
 add_test(NAME unit-tests
   COMMAND $<TARGET_FILE:${PROJECT_NAME}_unit> --gtest_color=yes

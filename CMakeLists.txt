@@ -41,7 +41,7 @@ endif ()
 # =============================================================================
 
 option(BUILD_FOR_SQLITE "Build library for SQLite database" YES)
-option(BUILD_SHARED_LIBS "Build shared library" NO)
+option(BUILD_SHARED_LIBS "Build shared library" YES)
 option(ENABLE_COVERAGE "Enable test coverage" NO)
 
 if (ENABLE_COVERAGE)
