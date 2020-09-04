@@ -277,7 +277,7 @@ TEST_F(SQLiteStatementTest, BindText) {
     const char* value = "Test";
 
     EXPECT_CALL(*mock_, sqlite3_bind_text(fake_stmt_, (index + 1), StrEq(value),
-            strlen(value), nullptr))
+            strlen(value), SQLITE_TRANSIENT))
             .WillOnce(Return(SQLITE_OK));
 
     statement_->bind(std::string(value), index);
