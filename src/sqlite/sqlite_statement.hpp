@@ -248,7 +248,7 @@ public:
      * @throw std::invalid_argument in case of failure to bind the value to
      * column.
      */
-    void bind(std::string value, uint16_t index) override;
+    void bind(const std::string& value, uint16_t index) override;
 
     /**
      * @brief Bind float.

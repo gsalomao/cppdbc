@@ -201,7 +201,7 @@ public:
      * @throw std::invalid_argument in case of failure to bind the value to
      * column.
      */
-    virtual void bind(std::string value, uint16_t index) = 0;
+    virtual void bind(const std::string& value, uint16_t index) = 0;
 
     /**
      * @brief Bind float.
