@@ -22,7 +22,7 @@
 # Library
 # =============================================================================
 
-if (BUILD_FOR_SQLITE)
+if (CPPDBC_FOR_SQLITE)
   set(DATABASE sqlite)
   set(LIBRARY_NAME ${PROJECT_NAME}-${DATABASE})
 

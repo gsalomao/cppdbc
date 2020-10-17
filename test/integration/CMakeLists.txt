@@ -25,11 +25,6 @@ set(INTEGRATION_TEST_REPORT_FILE "integration-test-report.xml" CACHE STRING
 
 message(STATUS "Integration test report file: ${INTEGRATION_TEST_REPORT_FILE}")
 
-find_program(CTEST ctest REQUIRED)
-
-add_custom_target(test_integration)
-add_custom_command(TARGET test_integration COMMAND ${CTEST} -V -R integration-tests)
-
 add_test(NAME integration-tests
   COMMAND $<TARGET_FILE:${PROJECT_NAME}_integration> --gtest_color=yes
   --gtest_output=xml:${TEST_REPORT_PATH}/${INTEGRATION_TEST_REPORT_FILE})

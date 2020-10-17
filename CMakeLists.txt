@@ -40,17 +40,16 @@ endif ()
 # Flags
 # =============================================================================
 
-option(BUILD_FOR_SQLITE "Build library for SQLite database" YES)
-option(BUILD_SHARED_LIBS "Build shared library" YES)
-option(ENABLE_COVERAGE "Enable test coverage" NO)
+option(CPPDBC_FOR_SQLITE "Build library for SQLite database" YES)
+option(CPPDBC_COVERAGE "Enable test coverage" NO)
 
-if (ENABLE_COVERAGE)
+if (CPPDBC_COVERAGE)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} --coverage")
   set(CMAKE_CXX_OUTPUT_EXTENSION_REPLACE 1)
-  set(ENABLE_TESTS YES)
+  set(CPPDBC_TESTS YES)
 endif ()
 
-if (ENABLE_TESTS)
+if (CPPDBC_TESTS)
   set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
 endif ()
 
@@ -59,9 +58,6 @@ if (NOT CMAKE_BUILD_TYPE)
 endif ()
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -fPIC")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
-
 list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 # =============================================================================
@@ -79,15 +75,13 @@ include_directories(include)
 include_directories(src)
 add_subdirectory(src)
 
-message(STATUS "Build type set to ${CMAKE_BUILD_TYPE}")
-
 # =============================================================================
 # Tests
 # =============================================================================
 
-option(ENABLE_TESTS "Enable tests" NO)
+option(CPPDBC_TESTS "Enable tests" NO)
 
-if (ENABLE_TESTS)
+if (CPPDBC_TESTS)
   enable_testing()
   add_subdirectory(test)
 endif ()
@@ -96,13 +90,14 @@ endif ()
 # Static Analysis
 # =============================================================================
 
-find_program(CPPCHECK cppcheck)
+option(CPPDBC_STATIC "Run static analysis" NO)
 
-if (CPPCHECK)
+if (CPPDBC_STATIC)
+  find_program(CPPCHECK cppcheck REQUIRED)
   message(STATUS "Adding static analysis")
 
-  add_custom_target(static)
-  add_custom_command(TARGET static
+  add_custom_target(cppdbc_static)
+  add_custom_command(TARGET cppdbc_static
     COMMAND ${CPPCHECK} -q
     --enable=all
     --suppress=missingIncludeSystem
@@ -110,8 +105,7 @@ if (CPPCHECK)
     -I../include
     -I../src
     ../src/)
-else ()
-  message(WARNING "No cppcheck found! Static check disabled.")
+
 endif ()
 
 # =============================================================================
@@ -126,9 +120,9 @@ message(STATUS "Installation into ${CMAKE_INSTALL_PREFIX}")
 # Documentation
 # =============================================================================
 
-option(BUILD_DOC "Build documentation" NO)
+option(CPPDBC_DOC "Build documentation" NO)
 
-if (BUILD_DOC)
+if (CPPDBC_DOC)
   add_subdirectory(doc)
 endif ()
 
@@ -140,14 +134,14 @@ message(STATUS)
 message(STATUS "-------------------------------------------------------------")
 message(STATUS "                      Build Info")
 message(STATUS "-------------------------------------------------------------")
-message(STATUS "Project:      ${PROJECT_NAME}")
-message(STATUS "Version:      ${PROJECT_VERSION}")
-message(STATUS "Build:        ${CMAKE_BUILD_TYPE}")
-message(STATUS "Install:      ${CMAKE_INSTALL_PREFIX}")
-message(STATUS "SQLite:       ${BUILD_FOR_SQLITE}")
-message(STATUS "Shared libs:  ${BUILD_SHARED_LIBS}")
-message(STATUS "Tests:        ${ENABLE_TESTS}")
-message(STATUS "Coverage:     ${ENABLE_COVERAGE}")
-message(STATUS "Doc:          ${BUILD_DOC}")
+message(STATUS "Project:            ${PROJECT_NAME}")
+message(STATUS "Version:            ${PROJECT_VERSION}")
+message(STATUS "Build:              ${CMAKE_BUILD_TYPE}")
+message(STATUS "Install:            ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "SQLite:             ${CPPDBC_FOR_SQLITE}")
+message(STATUS "Static Analysis:    ${CPPDBC_STATIC}")
+message(STATUS "Tests:              ${CPPDBC_TESTS}")
+message(STATUS "Coverage:           ${CPPDBC_COVERAGE}")
+message(STATUS "Doc:                ${CPPDBC_DOC}")
 message(STATUS "-------------------------------------------------------------")
 message(STATUS)

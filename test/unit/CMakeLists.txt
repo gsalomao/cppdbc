@@ -25,11 +25,6 @@ set(UNIT_TEST_REPORT_FILE "unit-test-report.xml" CACHE STRING
 
 message(STATUS "Unit test report file: ${UNIT_TEST_REPORT_FILE}")
 
-find_program(CTEST ctest REQUIRED)
-
-add_custom_target(test_unit)
-add_custom_command(TARGET test_unit COMMAND ${CTEST} -V -R unit-tests)
-
 add_test(NAME unit-tests
   COMMAND $<TARGET_FILE:${PROJECT_NAME}_unit> --gtest_color=yes
   --gtest_output=xml:${TEST_REPORT_PATH}/${UNIT_TEST_REPORT_FILE})

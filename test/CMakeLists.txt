@@ -25,17 +25,17 @@ set(TEST_REPORT_PATH "${CMAKE_BINARY_DIR}/test-results" CACHE STRING
 
 message(STATUS "Test report path: ${TEST_REPORT_PATH}")
 
-if (ENABLE_COVERAGE)
+if (CPPDBC_COVERAGE)
   message(STATUS "Adding test coverage")
   find_program(LCOV lcov REQUIRED)
 
-  add_custom_target(coverage)
-  add_custom_command(TARGET coverage
+  add_custom_target(cppdbc_coverage)
+  add_custom_command(TARGET cppdbc_coverage
     COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/coverage
     COMMAND ${LCOV} -q --rc lcov_function_coverage=0 --directory ${CMAKE_SOURCE_DIR} --capture
-    --output-file coverage/coverage.info
+      --output-file coverage/coverage.info
     COMMAND ${LCOV} -q --rc lcov_function_coverage=0 --remove coverage/coverage.info
-    '*/test/*' '*gtest*' '*gmock*' '/usr/*' --output-file coverage/coverage.info
+      '*/test/*' '*gtest*' '*gmock*' '/usr/*' --output-file coverage/coverage.info
     COMMAND ${LCOV} --summary coverage/coverage.info
     COMMAND genhtml -q coverage/coverage.info --no-function-coverage --output coverage/html
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR})

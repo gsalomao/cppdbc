@@ -27,7 +27,7 @@ if (Doxygen_FOUND)
   set(DOXYGEN_COLLABORATION_GRAPH NO)
   set(DOXYGEN_USE_MDFILE_AS_MAINPAGE ${PROJECT_SOURCE_DIR}/README.md)
 
-  doxygen_add_docs(doc
+  doxygen_add_docs(cppdbc_doc
     ${PROJECT_SOURCE_DIR}/README.md
     ${PROJECT_SOURCE_DIR}/include
     ${PROJECT_SOURCE_DIR}/src

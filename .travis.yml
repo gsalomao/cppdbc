@@ -41,13 +41,12 @@ install:
   - cd ${TRAVIS_BUILD_DIR}
 
 script:
-  - cmake -Bbuild -DENABLE_TESTS=YES -DENABLE_COVERAGE=YES -DBUILD_DOC=YES .
-  - cmake --build build/ --target static
+  - cmake -Bbuild -DCPPDBC_TESTS=YES -DCPPDBC_COVERAGE=YES -DCPPDBC_DOC=YES -DCPPDBC_STATIC=YES .
+  - cmake --build build/ --target cppdbc_static
   - cmake --build build/ --target all
-  - cmake --build build/ --target test_unit
-  - cmake --build build/ --target coverage
-  - cmake --build build/ --target test_integration
-  - cmake --build build/ --target doc
+  - cmake --build build/ --target test
+  - cmake --build build/ --target cppdbc_coverage
+  - cmake --build build/ --target cppdbc_doc
 
 after_success:
   - bash <(curl -s https://codecov.io/bash) -f build/coverage/coverage.info \
