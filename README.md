@@ -13,7 +13,6 @@ Use CMake to build and install the cppdbc.
 ### Dependencies
 
 - CMake 3.13+
-- G++
 
 ### Configuration
 The first step is configure the project using CMake.
@@ -44,18 +43,11 @@ The project is shipped with two groups of tests: unit and integration tests.
 To run the unit and integration tests, the tests must be enabled during the configuration.
 of the project.
 ```bash
-cmake -B build -D ENABLE_TESTS=YES .
+cmake -B build -D CPPDBC_TESTS=YES .
 ```
 
-Once the tests have been enabled, the tests can be built.
+After the tests has been built, run them calling this command:
 ```bash
-cmake --build build --target build_tests
-```
-
-After the tests has been built, each group of test can run individually or all at once.
-```bash
-cmake --build build --target test_unit
-cmake --build build --target test_integration
 cmake --build build --target test
 ```
 
@@ -75,13 +67,13 @@ cmake -B build -D UNIT_TEST_REPORT_FILE=<file> -D INTEGRATION_TEST_REPORT_FILE=<
 To build the test coverage report, the test coverage has to be enabled during the configuration
 of the project.
 ```bash
-cmake -B build -D ENABLE_COVERAGE=YES .
+cmake -B build -D CPPDBC_COVERAGE=YES .
 ```
 
 Once the test coverage has been enabled, and the unit test has been run, the test
 coverage report can be built.
 ```bash
-cmake --build build --target coverage
+cmake --build build --target cppdbc_coverage
 ```
 
 The test coverage report is generated under the test results path (by default build/test-results).
@@ -95,7 +87,7 @@ The project uses static analysis to prevent bugs and improve the code quality.
 
 Run the static analysis tool, whenever you would like to check the code.
 ```bash
-cmake --build build --target static
+cmake --build build --target cppdbc_static
 ```
 
 ## Documentation
@@ -104,24 +96,13 @@ The project has all classes and functions documented to help the users to unders
 To build the documentation, the documentation has to be enabled during the configuration
 of project.
 ```bash
-cmake -B build -D BUILD_DOC=YES .
+cmake -B build -D CPPDBC_DOC=YES .
 ```
 
 Once the documentation is enabled, it can be built.
 ```bash
-cmake --build build --target doc
+cmake --build build --target cppdbc_doc
 ```
-
-### Dependencies
-
-- Doxygen
-
-The documentation can be build automatically.
-```bash
-cmake --build build --target docs
-```
-
-The documentation is built in the path build/docs.
 
 ## Contributing
 Pull requests are welcome. 
