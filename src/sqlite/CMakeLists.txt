@@ -52,7 +52,7 @@ endif ()
 # Installation
 # =============================================================================
 
-if (BUILD_FOR_SQLITE)
+if (CPPDBC_INSTALL AND CPPDBC_FOR_SQLITE)
   include(GNUInstallDirs)
   install(TARGETS ${LIBRARY_NAME}
     DESTINATION ${CMAKE_INSTALL_LIBDIR}

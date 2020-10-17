@@ -36,6 +36,12 @@ if (${PROJECT_SOURCE_DIR} STREQUAL ${PROJECT_BINARY_DIR})
     "there.")
 endif ()
 
+include(CMakeDependentOption)
+
+cmake_dependent_option(CPPDBC_INSTALL
+  "Install the cppdbc folder to include during install process" ON
+  "CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME" OFF)
+
 # =============================================================================
 # Flags
 # =============================================================================
@@ -112,7 +118,10 @@ endif ()
 # =============================================================================
 
 include(GNUInstallDirs)
-install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+
+if (CPPDBC_INSTALL)
+  install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+endif ()
 
 # =============================================================================
 # Documentation
