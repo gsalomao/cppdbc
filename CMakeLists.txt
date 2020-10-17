@@ -65,7 +65,6 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 # =============================================================================
 
 include(GitVersion)
-message(STATUS "Project version: ${PROJECT_VERSION}")
 
 # =============================================================================
 # Libraries
@@ -114,7 +113,6 @@ endif ()
 
 include(GNUInstallDirs)
 install(DIRECTORY include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
-message(STATUS "Installation into ${CMAKE_INSTALL_PREFIX}")
 
 # =============================================================================
 # Documentation
@@ -125,23 +123,3 @@ option(CPPDBC_DOC "Build documentation" NO)
 if (CPPDBC_DOC)
   add_subdirectory(doc)
 endif ()
-
-# =============================================================================
-# Build Info
-# =============================================================================
-
-message(STATUS)
-message(STATUS "-------------------------------------------------------------")
-message(STATUS "                      Build Info")
-message(STATUS "-------------------------------------------------------------")
-message(STATUS "Project:            ${PROJECT_NAME}")
-message(STATUS "Version:            ${PROJECT_VERSION}")
-message(STATUS "Build:              ${CMAKE_BUILD_TYPE}")
-message(STATUS "Install:            ${CMAKE_INSTALL_PREFIX}")
-message(STATUS "SQLite:             ${CPPDBC_FOR_SQLITE}")
-message(STATUS "Static Analysis:    ${CPPDBC_STATIC}")
-message(STATUS "Tests:              ${CPPDBC_TESTS}")
-message(STATUS "Coverage:           ${CPPDBC_COVERAGE}")
-message(STATUS "Doc:                ${CPPDBC_DOC}")
-message(STATUS "-------------------------------------------------------------")
-message(STATUS)
