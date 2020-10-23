@@ -22,6 +22,8 @@
 
 #include "sqlite_transaction.hpp"
 
+#include <stdexcept>
+
 #include "cppdbc/sqlite/sqlite_database.hpp"
 
 namespace cppdbc {

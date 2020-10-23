@@ -21,6 +21,9 @@
  */
 
 #include "cppdbc/sqlite/sqlite_database.hpp"
+
+#include <stdexcept>
+
 #include "sqlite_statement.hpp"
 #include "sqlite_transaction.hpp"
 

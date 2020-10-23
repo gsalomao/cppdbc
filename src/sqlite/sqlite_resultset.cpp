@@ -22,6 +22,8 @@
 
 #include "sqlite_resultset.hpp"
 
+#include <stdexcept>
+
 #include "sqlite_statement.hpp"
 
 namespace cppdbc {
